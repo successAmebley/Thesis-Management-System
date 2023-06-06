@@ -67,7 +67,7 @@ router.post('/student/myprojectTopic',async(req,res)=>{
 router.get('/student/message', async(req, res) => {
     if (req.user && req.user.role === 'student') {
      
-        res.render('message', { user: req.user });
+        res.render('studentMessage', { user: req.user });
     } else {
         res.redirect('/login');
     }

@@ -55,7 +55,7 @@ router.get('/supervisor/students/message',async (req, res) => {
        
         let student =req.body.studentID
 
-        res.render('message', { user: req.user });
+        res.render('supervisorMessage', { user: req.user });
         
         //set up connection
         io.on('connection', socket=>{
