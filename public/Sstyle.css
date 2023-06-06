@@ -1,0 +1,26 @@
+.login{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+  }
+
+  .card{
+    width: 80vh;
+  }
+
+
+  .sidebar{
+    height: 100vh;
+};
+
+.stuChat{
+    background-color: #e2ffc7;
+    border-radius: 5px;
+};
+
+.supChat{
+    background-color: #4FE6F0;
+    border-radius: 5px;
+};

@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link rel="stylesheet" href="Sstyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <style>
+      .sidebar{
+                height: 100vh;
+              }
+    </style>
+</head>
+  <body>
+    
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse  flex-row-reverse" id="navbarTogglerDemo02">
+           
+            <ul class="navbar-nav  ">
+                <li class="nav-item dropdown  me-5">
+                    welcome, 
+                    <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                      John
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                      <li><a class="dropdown-item" href="#">Profile</a></li>
+                      <li><a class="dropdown-item" href="#">Settings</a></li>
+                      <li>
+                      <form action="/logout" method="post">
+                       <a class="dropdown-item" href="#">Logout</a>
+                      </form>
+                    </li>
+                    
+                    </ul>
+                  </li>
+                  <!-- <li class="g-1">
+                    <a class="" href="#"><i class="bi bi-chat-left-fill"></i></a>
+                </li> -->
+
+            </ul>
+            
+          </div>
+        </div>
+      </nav>
+
+      <div class="container-fluid m-0">
+        <div class="row ">
+          <div class="col-2 bg-primary sidebar" id="navbarTogglerDemo02">
+            <div class="" >
+                <div class=" ">
+                  <h5 class="text-white h4">content</h5>
+                  <hr>
+                  <div class="d-grid gap-2 ">
+                    <button class="btn btn-primary text-start" type="button">Dashboard</button>
+                    <button class="btn btn-primary text-start" type="button">Project</button>
+                    <button class="btn btn-primary text-start" type="button">Student</button>
+                    <button class="btn btn-primary text-start" type="button">Message</button>
+                    <button class="btn btn-primary text-start" type="button">Approval</button>
+                    <button class="btn btn-primary text-start" type="button">Report</button>
+                    <button class="btn btn-primary text-start" type="button">Log Out</button>
+                   
+                  </div>
+                </div>
+              </div>
+
+        </div>
+            <div class="col-10">
+                
+              <nav class="m-5">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Student</button>
+                  <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Supervisor</button>
+                  <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Panelist</button>
+                  <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled" aria-selected="false">Assign Student</button>
+                </div>
+              </nav>
+              <div class="tab-content mx-5" id="nav-tabContent">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                  </form>
+            
+                <!-- student approval -->
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                    <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Thesis Topic</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Approval</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          <% listOfStudent.forEach(student => { %>
+                            <tr>
+                              <th scope="row"><%- student.fName%>  <%- student.lName %></th>
+                              <td><%- student.topic %> <span><a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">read More</a></span></td>
+                              <td id="status"><%- student.thesisStatus %></td>
+                              <td>
+                                
+                                <form action="/HOD/HODapproval/approve" method="post" style="display: inline; margin-right: 5px;">
+                                  <input type="hidden" name="studentID" value="<%- student.ID %>">
+                                <button type="submit" id="approve" class="btn btn-outline-success" >Approve</button>
+                              </form>
+                              <form action="/HOD/HODapproval/reject" method="post" style="display: inline;">
+                                <input type="hidden" name="studentID" value="<%- student.ID %>">
+                                <button type="submit" id="reject" class="btn btn-outline-danger">Reject</button>
+                              </form>
+                            </td>
+                              
+                            <script>
+                            let status=  document.getElementById('status').innerText
+                            if(status==='Approved'){
+                              document.getElementById('approve').disabled = true;
+                            }
+                            if(status==='Rejected'){
+                              document.getElementById('reject').disabled = true;
+                            }
+                            
+                            </script>
+                            </tr>
+                          <!-- description modal -->
+                             <!-- Modal -->
+                          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="exampleModalLabel"><%- student.topic %></h1>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <%- student.description %>
+                                </div>
+                                <div class="modal-footer">
+                                  <form action="/HOD/HODapproval/approve" method="post" style="display: inline; margin-right: 5px;">
+                                    <input type="hidden" name="studentID" value="<%- student.ID %>">
+                                  <button type="submit" id="approve" class="btn btn-outline-success" >Approve</button>
+                                </form>
+                                <form action="/HOD/HODapproval/reject" method="post" style="display: inline;">
+                                  <input type="hidden" name="studentID" value="<%- student.ID %>">
+                                  <button type="submit" id="reject" class="btn btn-outline-danger">Reject</button>
+                                </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <% }) %>
+
+                         
+                          
+                         
+                          
+                          
+                         
+                      </table>
+                </div>
+                <!-- supervisor Approval -->
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Role</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <% listOfSupervisor.forEach(supervisor => { %>
+                        <tr>
+                          <th scope="row"><%- supervisor.fName%>  <%- supervisor.lName %></th>
+                          <td><%- supervisor.department %> </td>
+                          <td id="status"><%- supervisor.role %></td>
+                          </tr>
+                          <% })%>
+                </table>
+
+                </div>
+                <!-- panelist Approval -->
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">...
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Status</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <% listOfPanelist.forEach(panelist => { %>
+                        <tr>
+                          <th scope="row"><%- panelist.fName%>  <%- panelist.lName %></th>
+                          <td><%- panelist.department %> </td>
+                          <td ><%- panelist.role %></td>
+                          <td>  <form action="/HOD/HODapproval/approve" method="post" style="display: inline; margin-right: 5px;">
+                            <input type="hidden" name="staffID" value="<%- panelist.ID %>">
+                          <button type="submit" id="activate" class="btn btn-outline-success" >Activate</button>
+                        </form>
+                        <form action="/HOD/HODapproval/reject" method="post" style="display: inline;">
+                          <input type="hidden" name="staffID" value="<%- panelist.ID %>">
+                          <button type="submit" id="deactivate" class="btn btn-outline-danger">Deactivate</button>
+                        </form></td>
+                          </tr>
+
+                          <% if (panelist.panelist=='activated') { %>
+                            <script>
+                            document.getElementById('activate').disabled = true;
+                            </script>
+                           
+                          <% }else if(panelist.panelist=='deactivated'){%>
+                            <script>
+                              document.getElementById('deactivate').disabled = true;
+                              </script>
+
+                            <%    } %>
+                          <% })%>
+
+                          
+                          
+                </table>
+
+                </div>
+                <!-- Assign Student to Supervisor -->
+                <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...
+
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Thesis Topic</th>
+                        <th scope="col">Supervisor</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <% listOfStudentApproved.forEach(studentapproved => { %>
+                        <tr>
+                          <th scope="row"><%- studentapproved.fName%>  <%- studentapproved.lName %></th>
+                          <td><%- studentapproved.topic %> <span><a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal1">read More</a></span></td>
+                       
+                          <td>
+                            <div class="supervisor">
+                            <form action="/HOD/HODapproval/assign" method="post" style="display: inline; margin-right: 5px;">
+                            <select class="form-select" id="supervisorName" aria-label="Default select example" name="supervisorAssigned" placeholder="select supervisor">
+                            
+                            <% listOfSupervisor.forEach(supervisor => { %>
+                              <option value="<%- supervisor.ID %>"><%- supervisor.fName %> <%- supervisor.lName %></option>
+                            <% }) %>
+                    
+                          </select>
+                          
+                        </div>
+                        </td>
+                          <td>
+                            
+                            
+                              <input type="hidden" name="studentID" value="<%- studentapproved.ID %>">
+                            <button type="submit" id="assign" class="btn btn-outline-success" >Assign</button>
+
+
+                            <% if (studentapproved.supervisor) { %>
+
+                              <script>
+                                document.getElementById('assign').disabled = true;
+                                document.getElementById('supervisorName').disabled = true;
+                                document.getElementById('supervisorName').innerHTML=`<option value="<%- studentapproved.supervisor %>" selected><%- studentapproved.supervisor %> </option>`
+                                
+                                </script>
+                            <% } %> 
+                            
+                          </form>
+                          
+                        </td>
+                          
+                        
+                        
+                        
+                        </tr>
+                      <!-- description modal -->
+                         <!-- Modal -->
+                      <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleModalLabel"><%- studentapproved.topic %></h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <%- studentapproved.description %>
+                            </div>
+                            <div class="modal-footer">
+                              close
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <% }) %>
+
+                     
+                      
+                     
+                      
+                      
+                     
+                  </table>
+
+                </div>
+              </div>
+               
+                  
+            </div>
+            
+        </div>
+      </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
