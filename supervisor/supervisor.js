@@ -57,17 +57,7 @@ router.get('/supervisor/students/message',async (req, res) => {
 
         res.render('supervisorMessage', { user: req.user });
         
-        //set up connection
-        io.on('connection', socket=>{
-            socket.client.user = req.user;
-            console.log(socket.client.user.id); 
-            
-            //define any event listeners
-            socket.on('studentMessage', message => {
-                //code to handle message
-            }); 
-            socket.emit('supervisorMessage',"welcome")
-        }); 
+       
 
 } else {
     res.redirect('/login');
