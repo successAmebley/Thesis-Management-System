@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="Sstyle.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    
+    <script src="<%= socketIOClientScript %>"></script>
     <style>
       .sidebar{
       height: 100vh;
@@ -84,28 +84,73 @@
                     <div class="card">
                     <div class="card p-3 " style="max-height: 700px; overflow-y: auto;">
                     <!-- supervisor -->
-                    <div class="row">
+                    <!-- <div class="row">
                      <div class="col-6 supChat">
                         <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Similique fuga assumenda officiis maxime </p>
                         <p class="text-end">11:00</p>  
                      </div>   
-                    </div>
+                    </div> -->
                     <!-- student -->
-                    <div class="row flex-row-reverse ">
+                    <!-- <div class="row flex-row-reverse ">
                         <div class="col-6 stuChat">
                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Similique fuga assumenda officiis maxime </p>
                            <p class="text-end">11:00</p> 
                         </div>   
-                       </div>
+                       </div> -->
                        
+<!-- Chat UI -->
+<div id="messages"></div>
+<form id="message-form" action="/supervisor/students/message" method="post">
+  <select name="studentID">
+    <% students.forEach((student) => { %>
+      <option value="<%= student.ID %>"><%= student.fName %> <%= student.lName %></option>
+    <% }) %>
+  </select>
+  <input type="text" name="message" id="message-input" autocomplete="off">
+  <button>Send</button>
+</form>
 
+<!-- Socket.io logic -->
+<script>
+  // Connect to the Socket.io server
+  const socket = io();
+
+  // Join the supervisor's room for each student
+  <% students.forEach((student) => { %>
+    const studentRoom = 'supervisor_<%= user.ID %>_student_<%= student.ID %>';
+    socket.emit('join room', { room: studentRoom });
+  <% }) %>
+
+  // Handle received chat messages
+  socket.on('chat message', (message) => {
+    const { sender, message: msg } = message;
+    const messageElement = document.createElement('li');
+    messageElement.textContent = `${sender}: ${msg}`;
+    document.getElementById('messages').appendChild(messageElement);
+  });
+
+  // Handle form submission
+  document.getElementById('message-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const select = document.querySelector('select[name="studentID"]');
+    const input = document.getElementById('message-input');
+    const studentId = select.value;
+    const message = input.value.trim();
+    if (message) {
+      // Emit the chat message to the specific student's room
+      const studentRoom = 'supervisor_<%= user.ID %>_student_' + studentId;
+      socket.emit('chat message', { sender: 'supervisor', room: studentRoom, message });
+      input.value = '';
+    }
+  });
+</script>
                     </div>
-                    <form action="">
+                    <!-- <form action="">
                         <div class="input-group mt-3">
                             <input type="text" class="form-control" placeholder="send a Message" aria-label="Recipient's username" aria-describedby="button-addon2" name="message">
                             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">send</button>
                           </div>
-                    </form>
+                    </form> -->
                 </div>
                 </div>
             </div>

@@ -248,14 +248,14 @@
                     </thead>
                     <tbody>
 
-                      <% listOfStudentApproved.forEach(studentapproved => { %>
+                      <% listOfStudentToAssign.forEach(studentapproved => { %>
                         <tr>
                           <th scope="row"><%- studentapproved.fName%>  <%- studentapproved.lName %></th>
                           <td><%- studentapproved.topic %> <span><a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal1">read More</a></span></td>
                        
                           <td>
                             <div class="supervisor">
-                            <form action="/HOD/HODapproval/assign" method="post" style="display: inline; margin-right: 5px;">
+                            <form action="/HOD/HODapproval/assign" method="post" style="display: inline; margin-right: 5px;" >
                             <select class="form-select" id="supervisorName" aria-label="Default select example" name="supervisorAssigned" placeholder="select supervisor">
                             
                             <% listOfSupervisor.forEach(supervisor => { %>
@@ -263,7 +263,7 @@
                             <% }) %>
                     
                           </select>
-                          
+                           
                         </div>
                         </td>
                           <td>
@@ -271,7 +271,7 @@
                             
                               <input type="hidden" name="studentID" value="<%- studentapproved.ID %>">
                             <button type="submit" id="assign" class="btn btn-outline-success" >Assign</button>
-
+                          </form>
 
                             <% if (studentapproved.supervisor) { %>
 
@@ -283,7 +283,7 @@
                                 </script>
                             <% } %> 
                             
-                          </form>
+                      
                           
                         </td>
                           

@@ -9,9 +9,12 @@ const bcrypt=require('bcrypt')
 const port=3000
 const app= express()
 
-const server= require('http').createServer(app)
+const http = require('http');
+const socketIO = require('socket.io');
 
-const io= require('socket.io')(server)  // binding socket to server
+const server = http.createServer(app);
+const io = socketIO(server);
+
 
 // creating session
 app.use(session({
@@ -112,6 +115,25 @@ app.post('/login',(req,res,next)=>{
 
  
 
+
+
+// Socket.io logic
+io.on('connection', (socket) => {
+    console.log('A user connected');
+  
+    // Handle chat messages
+    socket.on('chat message', (message) => {
+      // Save the chat message to your database
+      // Example: chatModel.save(message)
+  
+      // Broadcast the chat message to all connected clients
+      io.emit('chat message', message);
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('A user disconnected');
+    });
+  });
 
 
 server.listen(port, ()=>console.log(`server up on ${port}`))

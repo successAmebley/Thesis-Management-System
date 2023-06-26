@@ -6,7 +6,7 @@ const Student = require('../db/studentdb')
 router.get('/student', async(req, res) => {
     if (req.user && req.user.role === 'student') {
      
-        res.render('studentdashboard', { user: req.user });
+        res.render('studentdashboard', { user: req.user , socketIOClientScript: '/socket.io/socket.io.js'});
     } else {
         res.redirect('/login');
     }
@@ -61,18 +61,34 @@ router.post('/student/myprojectTopic',async(req,res)=>{
     
 })
 
-
-
-// student message their supervisor
-router.get('/student/message', async(req, res) => {
-    if (req.user && req.user.role === 'student') {
-     
-        res.render('studentMessage', { user: req.user });
-    } else {
-        res.redirect('/login');
-    }
+// Student message their supervisor
+router.get('/student/message', async (req, res) => {
+  if (req.user && req.user.role === 'student') {
+    const supervisor = await Staff.findOne({ ID: req.user.supervisorID });
+    const room = `supervisor_${supervisor.ID}_student_${req.user.ID}`;
+    res.render('studentMessage', { user: req.user, supervisor, room,socketIOClientScript: '/socket.io/socket.io.js' });
+  } else {
+    res.redirect('/login');
+  }
 });
 
+// Handle student messages to their supervisor
+router.post('/student/message', (req, res) => {
+  if (req.user && req.user.role === 'student') {
+    const supervisorId = req.user.supervisorID;
+    const message = req.body.message;
+    const room = `supervisor_${supervisorId}_student_${req.user.ID}`;
+    const io = req.io;
+    // Emit the message to the supervisor's room
+    io.to(room).emit('chat message', { sender: 'student', message });
 
+    // Save the chat message to your database
+    // Example: chatModel.save(message)
+
+    res.redirect('/student/message');
+  } else {
+    res.redirect('/login');
+  }
+});
 
 module.exports=router

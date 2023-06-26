@@ -13,14 +13,15 @@ router.get('/HOD', async(req, res) => {
 
 router.get('/HOD/HODapproval',async(req,res)=>{
     if (req.user && req.user.role === 'HOD') {
-        let listOfStudent= await Student.find({Program:req.user.department})
+        let listOfStudent= await Student.find({Program:req.user.department,thesisStatus:'Pending Approval'})
         let listOfSupervisor = await Staff.find({ role: 'supervisor', department: req.user.department });
         let listOfPanelist= await Staff.find()
-        let listOfStudentApproved= await Student.find({Program:req.user.department, thesisStatus: 'Approved' })
+        let listOfStudentApproved= await Student.find({Program:req.user.department, thesisStatus: 'Approved',})
+        let listOfStudentToAssign=await Student.find({Program:req.user.department, thesisStatus: 'Approved',supervisor:null})
         
 
         // console.log(listOfStudent)
-          res.render('HODapproval', {listOfStudent,listOfSupervisor,listOfPanelist,listOfStudentApproved, });
+          res.render('HODapproval', {listOfStudent,listOfSupervisor,listOfPanelist,listOfStudentApproved,listOfStudentToAssign });
       } else {
           res.redirect('/login');
       }
@@ -70,7 +71,6 @@ router.post('/HOD/HODapproval/assign',async(req,res)=>{
     let assigned=   await Staff.findOne({ID: supervisorAssigned})
    
     await Student.findOneAndUpdate({ID:studentToBeAssigned},{supervisor:assigned.fName +" "+assigned.lName, supervisorID:assigned.ID})
-
     res.redirect('/HOD/HODapproval')
 
 })

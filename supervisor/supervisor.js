@@ -2,17 +2,14 @@ const express= require('express')
 const router= express.Router()
 const Staff = require('../db/staffdb')
 const Student = require('../db/studentdb')                   
-const http = require('http');
-const socketIo= require('socket.io')
+const { saveChatMessage } = require('../middleware/chat'); // Update the path to chat.js
 
-const io=socketIo()
-const server = http.createServer(express);
-io.attach(server);
+
 
 //supervisor dashboard
 router.get('/supervisor', (req, res) => {
     if (req.user && req.user.role === 'supervisor') {
-        res.render('suppervisordashboard', { user: req.user });
+        res.render('suppervisordashboard', { user: req.user, socketIOClientScript: '/socket.io/socket.io.js'  });
     } else {
         res.redirect('/login');
     }
@@ -48,21 +45,34 @@ router.post('/supervisor/students/supervise',async (req, res) => {
     }
 });
 
-
-//supervisor message a student
-router.get('/supervisor/students/message',async (req, res) => {
+// Supervisor message a student
+router.get('/supervisor/students/message', async(req, res) => {
     if (req.user && req.user.role === 'supervisor') {
-       
-        let student =req.body.studentID
+        studentId= req.body.studentID
+        const students = await Student.find({ supervisorID: req.user.ID });
+      res.render('supervisorMessage', { user: req.user , socketIOClientScript: '/socket.io/socket.io.js', studentId,students });
+    } else {
+      res.redirect('/login');
+    }
+  });
+  
+// Handle supervisor messages to a specific student
+router.post('/supervisor/students/message', (req, res) => {
+  if (req.user && req.user.role === 'supervisor') {
+    const studentId = req.body.studentID;
+    const message = req.body.message;
+    const room = `supervisor_${req.user.ID}_student_${studentId}`;
+    const io= req.io;
+    // Emit the message to the specific student's room
+    io.to(room).emit('chat message', { sender: 'supervisor', message });
 
-        res.render('supervisorMessage', { user: req.user });
-        
-       
+    // Save the chat message to your database
+    // Example: chatModel.save(message)
 
-} else {
+    res.redirect('/supervisor/students/message');
+  } else {
     res.redirect('/login');
-}
-}); 
-
+  }
+});
 
 module.exports=router

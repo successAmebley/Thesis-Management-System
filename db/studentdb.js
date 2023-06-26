@@ -40,7 +40,22 @@ const studentSchema= new mongoose.Schema({
     },
     supervisorID:{
         type:String
-    }
+    },
+    chats: [
+        {
+          sender: {
+            type: String,
+            enum: ['supervisor', 'student']
+          },
+          message: {
+            type: String
+          },
+          timestamp: {
+            type: Date,
+            default: Date.now
+          }
+        }
+      ]
 
 
 
