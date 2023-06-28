@@ -135,6 +135,13 @@
     if (message) {
       // Emit the chat message to the supervisor's room
       socket.emit('chat message', { sender: 'student', room: supervisorRoom, message });
+      
+            // Display the sent message in the chat UI
+            const messageElement = document.createElement('li');
+      messageElement.textContent = `You: ${message}`;
+      document.getElementById('messages').appendChild(messageElement);
+
+      
       input.value = '';
     }
   });

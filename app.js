@@ -127,8 +127,15 @@ io.on('connection', (socket) => {
       // Example: chatModel.save(message)
   
       // Broadcast the chat message to all connected clients
-      io.emit('chat message', message);
+      socket.to(message.room).emit('chat message', message);
     });
+
+    // Handle room joining
+  socket.on('join room', (data) => {
+    const { room } = data;
+    socket.join(room);
+  });
+
   
     socket.on('disconnect', () => {
       console.log('A user disconnected');

@@ -140,6 +140,12 @@
       // Emit the chat message to the specific student's room
       const studentRoom = 'supervisor_<%= user.ID %>_student_' + studentId;
       socket.emit('chat message', { sender: 'supervisor', room: studentRoom, message });
+      
+      // Display the sent message in the chat UI
+      const messageElement = document.createElement('li');
+      messageElement.textContent = `You: ${message}`;
+      document.getElementById('messages').appendChild(messageElement);
+      
       input.value = '';
     }
   });

@@ -2,7 +2,6 @@ const express= require('express')
 const router= express.Router()
 const Staff = require('../db/staffdb')
 const Student = require('../db/studentdb')                   
-const { saveChatMessage } = require('../middleware/chat'); // Update the path to chat.js
 
 
 
