@@ -2,11 +2,11 @@ const Student = require('../db/studentdb'); // Update the path to your Student m
 
 async function saveChatMessage(sender, message, studentId) {
   try {
-    const student = await Student.findById(studentId);
+    const student = await Student.findOne(studentId)
     if (!student) {
       throw new Error('Student not found');
     }
-
+    
     const chatMessage = {
       sender,
       message,
@@ -22,4 +22,4 @@ async function saveChatMessage(sender, message, studentId) {
   }
 }
 
-module.exports = { saveChatMessage };
+module.exports = {saveChatMessage };

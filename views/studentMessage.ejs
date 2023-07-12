@@ -11,7 +11,47 @@
     <style>
       .sidebar{
       height: 100vh;
+
   };
+  
+  .message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+
+    
+  }
+  
+  .sent {
+
+    
+    background-color: #FF9800;
+    color: white;
+    text-align: right;
+    border-radius: 5px;
+    padding: 20px;
+    margin-left: 50%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    list-style-type:none;
+}
+  
+  
+  .received {
+    
+    background-color: #2196F3;
+    color: white;
+    text-align: left;
+    border-radius: 5px;
+    padding: 20px;
+   margin-right: 50%;
+   margin-top: 5px;
+    margin-bottom: 5px;
+    list-style-type:none;
+    
+  }
+
     </style>
 </head>
   <body>
@@ -84,76 +124,68 @@
 
             </div>
             <div class="col-10">
-                <div class=" conatainer mt-5">
-                    <div class="card">
-                    <div class="card p-3 " style="max-height: 700px; overflow-y: auto;">
-                    <!-- supervisor -->
-                    <!-- <div class="row">
-                     <div class="col-6 supChat">
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Similique fuga assumenda officiis maxime </p>
-                        <p class="text-end">11:00</p>  
-                     </div>   
-                    </div> -->
-                    <!-- student -->
-                    <!-- <div class="row flex-row-reverse ">
-                        <div class="col-6 stuChat">
-                           <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Similique fuga assumenda officiis maxime </p>
-                           <p class="text-end">11:00</p> 
-                        </div>   
-                       </div> -->
+                <div class=" conatainer mt-5" >
+                  
+                    <div class="card p-3 " id="messages" style="height: 500px;overflow-y: scroll;">
+                    
                        
 
                <!-- Chat UI -->
-<div id="messages"></div>
-<form id="message-form" action="/student/message" method="post">
-  <input type="text" name="message" id="message-input" autocomplete="off">
-  <button>Send</button>
-</form>
 
-<!-- Socket.io logic -->
-<script>
-  // Connect to the Socket.io server
-  const socket = io();
 
-  // Join the student's room with their supervisor
-  const supervisorRoom = '<%= room %>';
-  socket.emit('join room', { room: supervisorRoom });
-
-  // Handle received chat messages
-  socket.on('chat message', (message) => {
-    const { sender, message: msg } = message;
-    const messageElement = document.createElement('li');
-    messageElement.textContent = `${sender}: ${msg}`;
-    document.getElementById('messages').appendChild(messageElement);
-  });
-
-  // Handle form submission
-  document.getElementById('message-form').addEventListener('submit', (event) => {
-    event.preventDefault();
-    const input = document.getElementById('message-input');
-    const message = input.value.trim();
-    if (message) {
-      // Emit the chat message to the supervisor's room
-      socket.emit('chat message', { sender: 'student', room: supervisorRoom, message });
-      
-            // Display the sent message in the chat UI
-            const messageElement = document.createElement('li');
-      messageElement.textContent = `You: ${message}`;
-      document.getElementById('messages').appendChild(messageElement);
-
-      
-      input.value = '';
-    }
-  });
-</script>
                     </div>
-                    <!-- <form action="">
-                        <div class="input-group mt-3">
-                            <input type="text" class="form-control" placeholder="send a Message" aria-label="Recipient's username" aria-describedby="button-addon2" name="message">
-                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">send</button>
-                          </div>
-                    </form> -->
-                </div>
+                    
+                    <form id="message-form" action="/student/message" method="post">
+                      <div class="input-group " style="margin-top: 10px;">
+                      <input type="text" name="message" class="form-control" id="message-input" autocomplete="off" >
+                      <button class="btn btn-outline-secondary" >send</button>
+                    </form>
+                    
+                    <!-- Socket.io logic -->
+                    <script>
+                      // Connect to the Socket.io server
+                      const socket = io();
+                    
+                      // Join the student's room with their supervisor
+                      const supervisorRoom = '<%= room %>';
+                      socket.emit('join room', { room: supervisorRoom });
+                    
+                      // Handle received chat messages
+                      socket.on('chat message', (message) => {
+                        const { sender, message: msg } = message;
+                        const messageElement = document.createElement('li');
+                    
+                         // Assign class based on the sender
+                      if (sender === 'student') {
+                        messageElement.classList.add('sent');
+                      } else {
+                        messageElement.classList.add('received');
+                      }
+                        
+                        messageElement.textContent = `${sender}: ${msg}`;
+                        document.getElementById('messages').appendChild(messageElement);
+                      });
+                    
+                      // Handle form submission
+                      document.getElementById('message-form').addEventListener('submit', (event) => {
+                        event.preventDefault();
+                        const input = document.getElementById('message-input');
+                        const message = input.value.trim();
+                        if (message) {
+                          // Emit the chat message to the supervisor's room
+                          socket.emit('chat message', { sender: 'student', room: supervisorRoom, message });
+                          
+                                // Display the sent message in the chat UI
+                                const messageElement = document.createElement('li');
+                                messageElement.classList.add('sent');
+                          messageElement.textContent = `You: ${message}`;
+                          document.getElementById('messages').appendChild(messageElement);
+                    
+                          
+                          input.value = '';
+                        }
+                      });
+                    </script>
                 </div>
             </div>
 

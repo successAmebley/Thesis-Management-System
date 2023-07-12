@@ -73,9 +73,10 @@ router.get('/student/message', async (req, res) => {
 });
 
 // Handle student messages to their supervisor
-router.post('/student/message', (req, res) => {
+router.post('/student/message', async(req, res) => {
   if (req.user && req.user.role === 'student') {
     const supervisorId = req.user.supervisorID;
+    const studentId=req.user.ID
     const message = req.body.message;
     const room = `supervisor_${supervisorId}_student_${req.user.ID}`;
     const io = req.io;
@@ -83,12 +84,13 @@ router.post('/student/message', (req, res) => {
     io.to(room).emit('chat message', { sender: 'student', message });
 
     // Save the chat message to your database
-    saveChatMessage('student', message);
+    await saveChatMessage('student', message,studentId);
 
     res.redirect('/student/message');
   } else {
     res.redirect('/login');
   }
 });
+
 
 module.exports=router

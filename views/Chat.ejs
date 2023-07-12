@@ -11,8 +11,31 @@
     <style>
       .sidebar{
       height: 100vh;
-     };
-  
+  };
+
+  #student-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #student-list li {
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+    border-radius: 10px;
+    margin-right: 5px;
+    
+  }
+
+  #student-list li:hover {
+    background-color: #a8e9fb;
+  }
+
+  #student-list li.active {
+    background-color: #FF9800;
+    color: white;
+  }
   .message {
     margin-bottom: 10px;
     padding: 10px;
@@ -48,15 +71,10 @@
     margin-bottom: 5px;
     list-style-type:none;
     }
-
     </style>
 </head>
   <body>
    
-
-
-
-
 
 
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
@@ -105,7 +123,7 @@
                         <button class="btn btn-primary text-start" type="button"><a href="/supervisor" style="text-decoration: none; color: white;">Dashboard</a></button>
                         <button class="btn btn-primary text-start" type="button"><a href="" style="text-decoration: none; color: white;">Project</a></button>
                         <button class="btn btn-primary text-start" type="button"><a href="/supervisor/students" style="text-decoration: none; color: white;">Student</a></button>
-                        <button class="btn btn-primary text-start" type="button"><a href="/supervisor/students/message" style="text-decoration: none; color: white;">Message</a></button>
+                        <button class="btn btn-primary text-start" type="button"><a href="" style="text-decoration: none; color: white;">Message</a></button>
                         <button class="btn btn-primary text-start" type="button"><a href="" style="text-decoration: none; color: white;">Approval</a></button>
                         <button class="btn btn-primary text-start" type="button"><a href="" style="text-decoration: none; color: white;">Report</a></button>
                         <button class="btn btn-primary text-start" type="button"><a href="" style="text-decoration: none; color: white;">Log Out</a></button>
@@ -117,30 +135,74 @@
 
             </div>
             <div class="col-10">
-              <div class="container mt-5">
+              <div class="conatainer mt-5">
                 
-                  <div class="card p-3" id="messages" style="height: 500px; overflow-y: scroll;">
+                  <div class="card p-3 " style="max-height: 700px; overflow-y: auto;">
                     <!-- Chat UI -->
+                    <div class="row">
+                      <div class="col col-3">
+                        <form id="message-form" action="/supervisor/students/message" method="post">
+                          <div class="card" style="height: 500px; overflow-y: auto;">
+                            <p class="mt-3" style="text-align: center;"><strong>STUDENTS</strong></p>
+                            <ul id="student-list" style="padding-left: 5px;">
+                              <% students.forEach((student) => { %>
+                                <li style="list-style-type:none;" data-studentid="<%= student.ID %>">
+                                  <%= student.fName %> <%= student.lName %>
+                                </li>
+                              <% }) %>
+                            </ul>
+                          </div>
+                      </div>
+                      <div class="col col-9" >
+                       <div class="card" id="messages" style="height: 500px; overflow-y: auto;"></div>
+                          <div class="input-group " style="margin-top: 10px;">
+                          <input type="text" name="message" class="form-control" id="message-input" autocomplete="off">
+                          <button class="btn btn-outline-secondary" >Send</button>
+                        </form>
+
+                      </div>
+
                     </div>
-                    <form id="message-form" action="/supervisor/student/message/<%= studentId %>" method="post">
-                     <div class="input-group " style="margin-top: 10px;">
-                      <input type="text" name="message" class="form-control" id="message-input" autocomplete="off">
-                      <button class="btn btn-outline-secondary" >Send</button>
-                    </form>
+                    
+                    
+                    
                     <!-- Socket.io logic -->
                     <script>
                       // Connect to the Socket.io server
                       const socket = io();
             
-                      // Join the supervisor's room for the selected student
-                      const studentRoom = 'supervisor_<%= user.ID %>_student_<%= studentId %>';
-                      socket.emit('join room', { room: studentRoom });
+                      // Handle click event on list items
+                      document.getElementById('student-list').addEventListener('click', (event) => {
+                        const selectedStudent = event.target.closest('li');
+                        
+                        if (selectedStudent) {
+                          const studentId = selectedStudent.getAttribute('data-studentid');
+                          const input = document.getElementById('message-input');
+                          input.focus();
+                          input.setAttribute('data-studentid', studentId);
+                          
+                          // Remove the 'active' class from all list items
+                          const listItems = document.querySelectorAll('#student-list li');
+                          listItems.forEach((item) => {
+                            item.classList.remove('active');
+                          });
+                          
+                          // Add the 'active' class to the clicked list item
+                          selectedStudent.classList.add('active');
+                        }
+                      });
+            
+                      // Join the supervisor's room for each student
+                      <% students.forEach((student) => { %>
+                        const studentRoom = 'supervisor_<%= user.ID %>_student_<%= student.ID %>';
+                        socket.emit('join room', { room: studentRoom });
+                      <% }) %>
             
                       // Handle received chat messages
                       socket.on('chat message', (message) => {
                         const { sender, message: msg } = message;
                         const messageElement = document.createElement('li');
-                       // Assign class based on the sender
+                        // Assign class based on the sender
                       if (sender === 'supervisor') {
                         messageElement.classList.add('sent');
                       } else {
@@ -154,17 +216,20 @@
                       document.getElementById('message-form').addEventListener('submit', (event) => {
                         event.preventDefault();
                         const input = document.getElementById('message-input');
+                        const studentId = input.getAttribute('data-studentid');
                         const message = input.value.trim();
-                        if (message) {
+                        
+                        if (message && studentId) {
                           // Emit the chat message to the specific student's room
+                          const studentRoom = 'supervisor_<%= user.ID %>_student_' + studentId;
                           socket.emit('chat message', { sender: 'supervisor', room: studentRoom, message });
-            
+                          
                           // Display the sent message in the chat UI
                           const messageElement = document.createElement('li');
                           messageElement.classList.add('sent');
                           messageElement.textContent = `You: ${message}`;
                           document.getElementById('messages').appendChild(messageElement);
-            
+                          
                           input.value = '';
                         }
                       });
@@ -173,10 +238,11 @@
                 </div>
               </div>
             </div>
+
             </div>
             
-        
-      
+        </div>
+      </div>
 
 
 

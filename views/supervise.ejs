@@ -70,7 +70,7 @@
                         <button class="btn btn-primary text-start" type="button"><a href="/supervisor" style="text-decoration: none; color: white;">Dashboard</a></button>
                         <button class="btn btn-primary text-start" type="button"><a href="" style="text-decoration: none; color: white;">Project</a></button>
                         <button class="btn btn-primary text-start" type="button"><a href="/supervisor/students" style="text-decoration: none; color: white;">Student</a></button>
-                        <button class="btn btn-primary text-start" type="button"><a href="" style="text-decoration: none; color: white;">Message</a></button>
+                        <button class="btn btn-primary text-start" type="button"><a href="/supervisor/students/message" style="text-decoration: none; color: white;">Message</a></button>
                         <button class="btn btn-primary text-start" type="button"><a href="" style="text-decoration: none; color: white;">Approval</a></button>
                         <button class="btn btn-primary text-start" type="button"><a href="" style="text-decoration: none; color: white;">Report</a></button>
                         <button class="btn btn-primary text-start" type="button"><a href="" style="text-decoration: none; color: white;">Log Out</a></button>
@@ -92,9 +92,8 @@
                                     Student: <%- studentdetail.fName +" " + studentdetail.lName%> 
                                   
                                   </p>
-                                  <form action="/supervisor/students/message" method="get" style="display: inline; margin-right: 5px;">
-                                    <input type="hidden" name="studentID" value="<%- studentdetail.ID %>">
-                                    <input type="hidden" name="supervisorID" value="<%- studentdetail.supervisorID %>">
+                                  <form action="/supervisor/student/message/<%- studentdetail.ID %>" method="get" style="display: inline; margin-right: 5px;">
+                                    
                                     <button type="submit" id="approve" class="btn btn-outline-warning" >Message</button>
                                   </form> 
                                   
