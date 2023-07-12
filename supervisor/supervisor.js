@@ -2,7 +2,7 @@ const express= require('express')
 const router= express.Router()
 const Staff = require('../db/staffdb')
 const Student = require('../db/studentdb')                   
-
+const { saveChatMessage } = require('../middleware/chat'); // Update the path to chat.js
 
 
 //supervisor dashboard
@@ -65,8 +65,9 @@ router.post('/supervisor/students/message', (req, res) => {
     // Emit the message to the specific student's room
     io.to(room).emit('chat message', { sender: 'supervisor', message });
 
-    // Save the chat message to your database
-    // Example: chatModel.save(message)
+ // Save the chat message to your database
+ saveChatMessage('supervisor', message);
+
 
     res.redirect('/supervisor/students/message');
   } else {

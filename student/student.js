@@ -1,7 +1,7 @@
 const router= require('express').Router()
 const Staff = require('../db/staffdb')
 const Student = require('../db/studentdb')
-
+const { saveChatMessage } = require('../middleware/chat'); // Update the path to chat.js
 // student home route
 router.get('/student', async(req, res) => {
     if (req.user && req.user.role === 'student') {
@@ -83,7 +83,7 @@ router.post('/student/message', (req, res) => {
     io.to(room).emit('chat message', { sender: 'student', message });
 
     // Save the chat message to your database
-    // Example: chatModel.save(message)
+    saveChatMessage('student', message);
 
     res.redirect('/student/message');
   } else {
