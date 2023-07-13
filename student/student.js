@@ -65,8 +65,9 @@ router.post('/student/myprojectTopic',async(req,res)=>{
 router.get('/student/message', async (req, res) => {
   if (req.user && req.user.role === 'student') {
     const supervisor = await Staff.findOne({ ID: req.user.supervisorID });
+    const studentId=req.user.ID
     const room = `supervisor_${supervisor.ID}_student_${req.user.ID}`;
-    res.render('studentMessage', { user: req.user, supervisor, room,socketIOClientScript: '/socket.io/socket.io.js' });
+    res.render('studentMessage', { user: req.user, supervisor, room,socketIOClientScript: '/socket.io/socket.io.js' ,studentId});
   } else {
     res.redirect('/login');
   }
@@ -84,7 +85,7 @@ router.post('/student/message', async(req, res) => {
     io.to(room).emit('chat message', { sender: 'student', message });
 
     // Save the chat message to your database
-    await saveChatMessage('student', message,studentId);
+    saveChatMessage('student', message,studentId);
 
     res.redirect('/student/message');
   } else {

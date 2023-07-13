@@ -157,7 +157,8 @@
                         const message = input.value.trim();
                         if (message) {
                           // Emit the chat message to the specific student's room
-                          socket.emit('chat message', { sender: 'supervisor', room: studentRoom, message });
+                          const studentid= "<%=studentId%>"
+                          socket.emit('chat message', { sender: 'supervisor', room: studentRoom, message ,studentid});
             
                           // Display the sent message in the chat UI
                           const messageElement = document.createElement('li');

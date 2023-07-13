@@ -1,8 +1,9 @@
 const Student = require('../db/studentdb'); // Update the path to your Student model
 
 async function saveChatMessage(sender, message, studentId) {
+  console.log(await Student.findOne({studentId}))
   try {
-    const student = await Student.findOne(studentId)
+    const student = await Student.findOne({ID:studentId})
     if (!student) {
       throw new Error('Student not found');
     }

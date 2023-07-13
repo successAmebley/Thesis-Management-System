@@ -34,7 +34,7 @@ const studentRoute= require('./student/student')
 const supervisorRoute=require('./supervisor/supervisor')
 const Staff = require('./db/staffdb')
 const Student = require('./db/studentdb')
-
+const { saveChatMessage } = require('./middleware/chat');
  
 app.set('view engine','ejs')
 app.use(express.static(__dirname +'/public'));
@@ -125,6 +125,8 @@ io.on('connection', (socket) => {
     socket.on('chat message', (message) => {
       // Save the chat message to your database
       // Example: chatModel.save(message)
+      console.log(message)
+      saveChatMessage(message.sender,message.message,message.studentid)
   
       // Broadcast the chat message to all connected clients
       socket.to(message.room).emit('chat message', message);
