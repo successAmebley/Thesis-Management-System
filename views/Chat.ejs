@@ -198,6 +198,7 @@
                         socket.emit('join room', { room: studentRoom });
                       <% }) %>
             
+                      
                       // Handle received chat messages
                       socket.on('chat message', (message) => {
                         const { sender, message: msg } = message;
