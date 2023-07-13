@@ -121,6 +121,14 @@
                 
                   <div class="card p-3" id="messages" style="height: 500px; overflow-y: scroll;">
                     <!-- Chat UI -->
+                     <!-- Render saved chat messages -->
+      <% for (const chat of student.chats) { %>
+        <% if (chat.sender === 'supervisor') { %>
+          <li class="sent">You: <%= chat.message %></li>
+        <% } else { %>
+          <li class="received">Student: <%= chat.message %></li>
+        <% } %>
+      <% } %>
                     </div>
                     <form id="message-form" action="/supervisor/student/message/<%= studentId %>" method="post">
                      <div class="input-group " style="margin-top: 10px;">

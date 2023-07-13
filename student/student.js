@@ -67,7 +67,9 @@ router.get('/student/message', async (req, res) => {
     const supervisor = await Staff.findOne({ ID: req.user.supervisorID });
     const studentId=req.user.ID
     const room = `supervisor_${supervisor.ID}_student_${req.user.ID}`;
-    res.render('studentMessage', { user: req.user, supervisor, room,socketIOClientScript: '/socket.io/socket.io.js' ,studentId});
+    const student = await Student.findOne({ ID: req.user.ID });
+res.render('studentMessage', { user: req.user, supervisor, room, socketIOClientScript: '/socket.io/socket.io.js', studentId, chats: student.chats });
+
   } else {
     res.redirect('/login');
   }

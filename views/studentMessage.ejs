@@ -127,9 +127,15 @@
                 <div class=" conatainer mt-5" >
                   
                     <div class="card p-3 " id="messages" style="height: 500px;overflow-y: scroll;">
-                    
-                       
-
+                      <% for (const chat of chats) { %>
+                        <li class="<%= chat.sender === 'student' ? 'sent' : 'received' %>">
+                          <% if (chat.sender === 'student') { %>
+                            You: <%= chat.message %>
+                          <% } else { %>
+                            <%= chat.sender %>: <%= chat.message %>
+                          <% } %>
+                        </li>
+                      <% } %>
                <!-- Chat UI -->
 
 

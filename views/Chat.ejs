@@ -154,7 +154,11 @@
                           </div>
                       </div>
                       <div class="col col-9" >
-                       <div class="card" id="messages" style="height: 500px; overflow-y: auto;"></div>
+                       <div class="card" id="messages" style="height: 500px; overflow-y: auto;">
+                      //chat goes here
+                      
+                      
+                      </div>
                           <div class="input-group " style="margin-top: 10px;">
                           <input type="text" name="message" class="form-control" id="message-input" autocomplete="off">
                           <button class="btn btn-outline-secondary" >Send</button>
@@ -172,25 +176,45 @@
                       const socket = io();
             
                       // Handle click event on list items
-                      document.getElementById('student-list').addEventListener('click', (event) => {
-                        const selectedStudent = event.target.closest('li');
-                        
-                        if (selectedStudent) {
-                          const studentId = selectedStudent.getAttribute('data-studentid');
-                          const input = document.getElementById('message-input');
+                      document.getElementById('student-list').addEventListener('click', async (event) => {
+  const selectedStudent = event.target.closest('li');
+
+  if (selectedStudent) {
+    const studentId = selectedStudent.getAttribute('data-studentid');
+    const response = await fetch(`/supervisor/students/message/chat/${studentId}`);
+    const { messages } = await response.json();
+    const input = document.getElementById('message-input');
                           input.focus();
                           input.setAttribute('data-studentid', studentId);
-                          
-                          // Remove the 'active' class from all list items
-                          const listItems = document.querySelectorAll('#student-list li');
-                          listItems.forEach((item) => {
-                            item.classList.remove('active');
-                          });
-                          
-                          // Add the 'active' class to the clicked list item
-                          selectedStudent.classList.add('active');
-                        }
-                      });
+
+    // Remove existing messages from the UI
+    const messagesContainer = document.getElementById('messages');
+    messagesContainer.innerHTML = '';
+
+    // Render the fetched messages
+    messages.forEach((message) => {
+  const messageElement = document.createElement('li');
+  if (message.sender === 'supervisor') {
+    messageElement.classList.add('sent');
+    messageElement.textContent = `You: ${message.message}`;
+  } else {
+    messageElement.classList.add('received');
+    messageElement.textContent = `Student: ${message.message}`;
+  }
+  messagesContainer.appendChild(messageElement);
+});
+
+    // Remove the 'active' class from all list items
+    const listItems = document.querySelectorAll('#student-list li');
+    listItems.forEach((item) => {
+      item.classList.remove('active');
+    });
+
+    // Add the 'active' class to the clicked list item
+    selectedStudent.classList.add('active');
+  }
+});
+
             
                       // Join the supervisor's room for each student
                       <% students.forEach((student) => { %>

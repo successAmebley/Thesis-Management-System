@@ -56,13 +56,32 @@ if (req.user && req.user.role === 'supervisor') {
 }
 });
 
+router.get('/supervisor/students/message/chat/:studentId', async (req, res) => {
+  try {
+    const student = await Student.findOne({ ID: req.params.studentId });
+    if (!student) {
+      throw new Error('Student not found');
+    }
+
+    res.json({ messages: student.chats });
+  } catch (error) {
+    console.error('Error fetching chat messages:', error);
+    res.status(500).json({ error: 'Failed to fetch chat messages' });
+  }
+});
+
+
 
 // Supervisor message a student
 router.get('/supervisor/student/message/:studentID', async (req, res) => {
 if (req.user && req.user.role === 'supervisor') {
   const studentId = req.params.studentID;
-  const students = await Student.find({ supervisorID: req.user.ID });
-  res.render('supervisorMessage', { user: req.user, socketIOClientScript: '/socket.io/socket.io.js', studentId, students });
+  //const students = await Student.find({ supervisorID: req.user.ID });
+  //res.render('supervisorMessage', { user: req.user, socketIOClientScript: '/socket.io/socket.io.js', studentId, students });
+
+
+  const student = await Student.findOne({ ID: studentId });
+    res.render('supervisorMessage', { user: req.user, socketIOClientScript: '/socket.io/socket.io.js', studentId, student });
 } else {
   res.redirect('/login');
 }
