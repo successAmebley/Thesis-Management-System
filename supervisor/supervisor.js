@@ -3,7 +3,12 @@ const router= express.Router()
 const Staff = require('../db/staffdb')
 const Student = require('../db/studentdb')                   
 const { saveChatMessage } = require('../middleware/chat'); // Update the path to chat.js
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const flash = require('connect-flash');
 
+router.use(flash());
 
 //supervisor dashboard
 router.get('/supervisor', (req, res) => {
@@ -31,19 +36,22 @@ router.get('/supervisor/students',async (req, res) => {
 
 
 //supervisor supervise each student
-router.post('/supervisor/students/supervise',async (req, res) => {
+router.get('/supervisor/students/supervise',async (req, res) => {
   if (req.user && req.user.role === 'supervisor') {
 
 
-      let student =req.body.studentID
+      let student =req.query.studentID
 
       let studentdetail= await Student.findOne({ID:student})
+      
+      const messages = req.flash('info',);
 
-      res.render('supervise', { user: req.user ,studentdetail});
+      res.render('supervise', { user: req.user ,studentdetail,messages});
   } else {
       res.redirect('/login');
   }
 });
+
 
 // Supervisor message  students
 router.get('/supervisor/students/message', async (req, res) => {
@@ -126,6 +134,99 @@ saveChatMessage('supervisor', message,studentId);
 } else {
   res.redirect('/login');
 }
+});
+
+
+
+//handle supervisor upload
+// router.post('/supervisor/student/upload', (req, res) => {
+//   if (req.user && req.user.role === 'supervisor') {
+    
+  
+//     res.redirect('/supervisor/students/supervise');
+//   } else {
+//     res.redirect('/login');
+//   }
+//   });
+  
+
+// Set up multer to store uploaded files in specific folders based on studentID and uploaderType
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const studentID = req.body.studentID;
+    const uploaderType = req.body.uploaderType;
+
+    let destinationFolder = '';
+    if (uploaderType === 'supervisor') {
+      destinationFolder = `uploads/${studentID}/supervisor/`;
+    } else if (uploaderType === 'student') {
+      destinationFolder = `uploads/${studentID}/student/`;
+    } else {
+      destinationFolder = 'uploads/'; // Fallback, you can handle other cases as needed
+    }
+
+    // Create the directory if it doesn't exist
+    fs.mkdirSync(path.join( destinationFolder), { recursive: true });
+
+    cb(null, destinationFolder);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// Handle supervisor upload
+router.post('/supervisor/student/upload', upload.single('document'), async (req, res) => {
+  if (req.user && req.user.role === 'supervisor') {
+    const studentID = req.body.studentID;
+    const uploadedDocument = req.file;
+    //console.log(uploadedDocument,studentID)
+
+     req.flash('success', 'File uploaded successfully!');
+   
+    const findStudent= await Student.findOne({ID:studentID})
+    if(!findStudent){
+      console.log("student not found")
+    }else{
+      const filename= uploadedDocument.filename
+       console.log(filename)
+      const supervisor = {
+        sender:'supervisor',
+        filename,
+        timestamp: new Date()
+      };
+      findStudent.uploads.push(supervisor)
+     await  findStudent.save()
+
+    }
+    // Here, you can save the "uploadedDocument" information in your database, associated with the specific studentID.
+    // You can also perform any additional processing or validation here.
+
+   req.flash('info', 'upload successfull');
+
+
+
+    res.redirect(`/supervisor/students/supervise?studentID=${studentID}`,);
+  } else {
+    res.redirect('/login');
+  }
+});
+
+router.get('/supervisor/students/:studentID/student/:fileName', (req, res) => {
+  const { studentID, fileName } = req.params;
+
+  // Build the file path based on studentID, uploaderType, and fileName
+  const filePath = path.join(__dirname, '..', 'uploads', studentID, 'student', fileName);
+
+  // Check if the file exists
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+    
+  } else {
+    res.status(404).send('File not found');
+  }
 });
 
 

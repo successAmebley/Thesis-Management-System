@@ -91,7 +91,7 @@
                               <td id="status"><%- student.thesisStatus %></td>
                               <td>
                                 
-                                <form action="/supervisor/students/supervise" method="post" style="display: inline; margin-right: 5px;">
+                                <form action="/supervisor/students/supervise" method="get" style="display: inline; margin-right: 5px;">
                                   <input type="hidden" name="studentID" value="<%- student.ID %>">
                                 <button type="submit" id="approve" class="btn btn-outline-success" >Supervise</button>
                               </form>

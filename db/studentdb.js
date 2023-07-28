@@ -55,6 +55,20 @@ const studentSchema= new mongoose.Schema({
             default: Date.now
           }
         }
+      ],
+      uploads:[{
+        sender:{
+            type: String
+        },
+        filename:{
+            type: String
+        },
+        timestamp: {
+            type: Date,
+            default: Date.now
+          }
+
+    }
       ]
 
 

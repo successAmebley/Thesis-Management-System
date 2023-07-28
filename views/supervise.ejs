@@ -101,25 +101,58 @@
                             </div>
                         </div>
 
-                        <div class="col  ">
-                            <div class="card ">
-                                <div class="card-body">
-                                    <h5>Upload documentation to supervisor for Review</h5>
-                                    <br>
-                                    <ul class="text-danger">
-                                        <li>Ensure documents are in correct format(i.e ,docx)</li>
-                                        <li>Ensure documents are name according to thesis chapter(eg: Chapter one, chapter 2)</li>
-                                    </ul>
-                                    
-                                      
-                                  <form action="" method="post">
-                                    <div class="input-group mb-3 mt-5">
-                                        <input type="file" class="form-control" id="inputGroupFile02">
-                                        <label class="input-group-text" for="inputGroupFile02">Upload</label>
-                                      </div>
-                                  </form>
+                        <div class="col">
+                          <div class="card">
+                            <div class="card-body">
+                              <h5>Upload documentation to Student</h5>
+                              <br>
+                                <!-- Add the following code to display the flash message -->
+                                <% if (messages) { %>
+                                  <div class="alert alert-success mt-3" id="flashMessage">
+                                    <%= messages %>
+                                  </div>
+                                <% } %>
+
+                                <script>
+                                  // Function to remove the flash message after 3 seconds
+                                  function removeFlashMessage() {
+                                    const flashMessage = document.getElementById('flashMessage');
+                                    if (flashMessage) {
+                                      setTimeout(() => {
+                                        flashMessage.style.display = 'none';
+                                      }, 1000); // 3 seconds (3000 milliseconds)
+                                    }
+                                  }
+                                
+                                  // Call the function when the page is loaded
+                                  window.addEventListener('DOMContentLoaded', () => {
+                                    removeFlashMessage();
+                                  });
+                                </script>
+                                
+
+                                
+                                
+                                
+                                
+                                
+                              
+                              <ul class="text-danger">
+                                <li>Ensure documents are in the correct format (i.e., docx)</li>
+                                <li>Ensure documents are named according to thesis chapters (e.g., Chapter one, chapter 2)</li>
+                              </ul>
+                              <form action="/supervisor/student/upload" method="post" enctype="multipart/form-data">
+                                <!-- Add a hidden input field to store the student ID -->
+                                <input type="hidden" name="studentID" value="<%- studentdetail.ID %>">
+                                <input type="hidden" name="uploaderType" value="supervisor"> <!-- Indicate that the uploader is a supervisor -->
+                                <div class="input-group mb-3 mt-5">
+                                  <!-- Add the "name" attribute to the file input -->
+                                  <input type="file" class="form-control" name="document" id="inputGroupFile02">
+                                  <button class="btn btn-success input-group-text" type="submit">Upload</button>
                                 </div>
-                              </div>
+                              </form>
+                            </div>
+                          </div>
                         </div>
                     </div>
                 </div>
@@ -168,7 +201,14 @@
                                        
                                         <td><a href="#">Thesis Mangement System-Introduction</a></td>
                                        
+                                        
                                       </tr>
+                                      <% studentdetail.uploads.forEach((file) => { %>
+                                        <% if (file.sender === 'student') { %>
+                                          <a href="/supervisor/students/<%-studentdetail.ID%>/student/<%-file.filename%>"><%-file.filename%></a>
+                                          <br>
+                                        <% } %>
+                                      <% }); %>
                                       
                                     </tbody>
                                   </table>
