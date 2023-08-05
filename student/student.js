@@ -5,6 +5,9 @@ const { saveChatMessage } = require('../middleware/chat'); // Update the path to
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
+const mammoth = require('mammoth');
+const PDFDocument = require('pdfkit');
+ 
 // student home route
 router.get('/student', async(req, res) => {
     if (req.user && req.user.role === 'student') {
@@ -88,8 +91,7 @@ router.post('/student/upload', upload.single('document'), async (req, res) => {
      await  findStudent.save()
 
     }
-    // Here, you can save the "uploadedDocument" information in your database, associated with the specific studentID.
-    // You can also perform any additional processing or validation here.
+  
 
     res.redirect(`/student/myproject/${studentID}`);
   } else {
@@ -175,5 +177,69 @@ router.get('/student/:studentID/student/:fileName', (req, res) => {
   }
 });
 
+
+
+
+router.get('/plagiarism', (req,res)=>{
+
+  if (req.user && req.user.role === 'student'||req.user.role ==='supervisor') {
+    const { originalname, score, pdfFilePath}=""
+    const messages = req.flash('info');
+   res.render('plagiarism',{user: req.user ,messages:messages,  originalname, score, pdfFilePath })
+
+  } else {
+    res.redirect('/login');
+  }
+})
+
+// Route to handle file upload and plagiarism check
+router.post('/plagiarism', upload.single('document'), async (req, res) => {
+  if (req.user && req.user.role === 'student') {
+    try {
+      const { originalname, path } = req.file;
+      const outputFileName = originalname.replace('.docx', '.pdf');
+  
+      // Read the DOCX file using mammoth
+      mammoth.extractRawText({ path: path })
+        .then((result) => {
+          const text = result.value.trim();
+          const score = '10%';
+  
+          // Create a new PDF
+          const doc = new PDFDocument();
+          const outputPath = `./uploads/${outputFileName}`;
+   
+          // Add text to the PDF
+          doc.pipe(fs.createWriteStream(outputPath));
+          doc.fontSize(12).text(text);
+          doc.fontSize(12).text(`Score is ${score}`);
+          doc.end();
+  
+          // Set the appropriate headers for file download
+          res.setHeader('Content-Disposition', `attachment; filename="${outputFileName}"`);
+          res.setHeader('Content-Type', 'application/pdf');
+  
+          // Send the PDF as a response
+          const readStream = fs.createReadStream(outputPath);
+          readStream.pipe(res);
+   
+          // Remove the temporary files
+          readStream.on('end', () => {
+            fs.unlinkSync(path); // Remove the uploaded DOCX file
+            fs.unlinkSync(outputPath); // Remove the temporary PDF file
+          });
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          res.status(500).send('Error occurred');
+        });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).send('Error occurred');
+    }
+} else {
+  res.redirect('/login');
+}
+ });
 
 module.exports=router

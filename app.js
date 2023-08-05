@@ -145,6 +145,6 @@ io.on('connection', (socket) => {
   });
 
 
-server.listen(port, ()=>console.log(`server up on ${port}`))
+server.listen(port,'0.0.0.0', ()=>console.log(`server up on ${port}`))
 
 

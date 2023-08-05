@@ -41,6 +41,7 @@ router.post('/staffregister',async(req,res)=>{
 //student registration
 router.post('/studentregister',async(req,res)=>{
   const {fName, lName, ID, email, department, Program,cPassword}=req.body
+  console.log(req.body)
   const role='student'
   const user= await student.findOne({ID})
   
