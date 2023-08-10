@@ -230,4 +230,42 @@ router.get('/supervisor/students/:studentID/student/:fileName', (req, res) => {
 });
 
 
+router.post('/chapter', async(req, res) => {
+  if(req.user && req.user.role === 'supervisor') {
+
+const studentStatus= await Student.findOneAndUpdate({ID:req.body.studentID},{thesisStatus:req.body.chapter})
+
+res.redirect('/supervisor/students/supervise?studentID='+req.body.studentID);
+  }
+  
+})
+
+router.get('/supervisor/approval', async(req, res) => {
+  if (req.user && req.user.role === 'supervisor') {
+
+
+    let listOfStuddentAssigned= await Student.find({supervisorID:req.user.ID,thesisStatus:'chapter 5'})
+
+
+    res.render('SupervisorApproval', { user: req.user ,listOfStuddentAssigned});
+} else {
+    res.redirect('/login');
+}
+})
+
+router.post('/supervisor/approval',async(req, res)=>{
+  if (req.user && req.user.role === 'supervisor') {
+    console.log(req.body)
+
+   const grade=await Student.findOneAndUpdate({ID:req.body.studentID},{supervisorGrade:req.body.supervisorGrade})
+
+   res.redirect('/supervisor/approval')
+  } else {
+    res.redirect('/login');
+}
+})
+
+
+
+
 module.exports=router

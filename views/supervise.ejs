@@ -187,7 +187,8 @@ rel="stylesheet"
                                 <div class="card-body ">
                                   
                                   <p class="card-text">
-                                    Student: <%- studentdetail.fName +" " + studentdetail.lName%> 
+                                    Student: <%- studentdetail.fName +" " + studentdetail.lName%> <br>
+                                    Thesis Status: <%- studentdetail.thesisStatus%>
                                   
                                   </p>
                                   <form action="/supervisor/student/message/<%- studentdetail.ID %>" method="get" style="display: inline; margin-right: 5px;">
@@ -260,22 +261,72 @@ rel="stylesheet"
                     <div class="col">
                         <div class="card">
                             <div class="card-header">
-                              To DO List
+                              Chapter Approval
                             </div>
                             <div class="card-body">
-                              <ul>
-                                <li class=" ">
-                                    <h5>write Introduction 
-                                        <a href="" class="btn bg-primary ms-5">Done</a>
-                                        <a href="" class="btn bg-primary">Delete</a></h5>
+                              <ul class="">
+                                <li class="mt-3 ">
+                                    
+                                    <form action="/chapter" method="post">
+                                      <h5 style="display: inline;">Chapter 1</h5> 
+                                      <input type="hidden" name="studentID" value="<%- studentdetail.ID %>">
+                                      <input type="text" name="chapter"value="chapter 1" hidden>
+                                      <button type="submit" class="btn bg-primary ms-5">Done</a>
+
+                                    </form>
+                                        
                                 </li>
+                                <li class="mt-3 ">
+                                    
+                                  <form action="/chapter" method="post">
+                                    <h5 style="display: inline;">Chapter 2</h5>
+                                    <input type="hidden" name="studentID" value="<%- studentdetail.ID %>"> 
+                                    <input type="text" name="chapter" value="chapter 2" hidden>
+                                    <button type="submit" class="btn bg-primary ms-5">Done</a>
+
+                                  </form>
+                                      
+                              </li>
+                              <li class="mt-3 ">
+                                    
+                                <form action="/chapter" method="post">
+                                  <h5 style="display: inline;">Chapter 3</h5> 
+                                  <input type="hidden" name="studentID" value="<%- studentdetail.ID %>">
+                                  <input type="text" name="chapter" value="chapter 3" hidden>
+                                  <button type="submit" class="btn bg-primary ms-5">Done</a>
+
+                                </form>
+                                    
+                            </li>
+                            <li class="mt-3 ">
+                                    
+                              <form action="/chapter" method="post">
+                                <h5 style="display: inline;">Chapter 4</h5> 
+                                <input type="hidden" name="studentID" value="<%- studentdetail.ID %>">
+                                <input type="text" name="chapter" value="chapter 4" hidden>
+                                <button type="submit" class="btn bg-primary ms-5">Done</a>
+
+                              </form>
+                                  
+                          </li>
+                          <li class="mt-3 ">
+                                    
+                            <form action="/chapter" method="post">
+                              <h5 style="display: inline;">Chapter 5</h5> 
+                              <input type="hidden" name="studentID" value="<%- studentdetail.ID %>">
+                              <input type="text" name="chapter" value="chapter 5" hidden>
+                              <button type="submit" class="btn bg-primary ms-5">Done</a>
+
+                            </form>
+                                
+                        </li>
                               </ul>
-                              <form action="" method="post">
+                              <!-- <form action="" method="post">
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Add Your TODO" aria-describedby="button-addon2">
                                     <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add</button>
                                   </div>
-                              </form>
+                              </form> -->
                               
                             </div>
                           </div>

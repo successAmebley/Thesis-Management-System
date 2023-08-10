@@ -209,14 +209,18 @@ rel="stylesheet"
      
   </div>
  <div class="row mt-5">
-      <div class="col-4">
-          <a href="/plagiarism" class="card" style="width: 15rem; height: 15rem;">
-              <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>
-              <div class="card-body">
-                <p class="card-text">Check Plagiarism </p>
-              </div>
-          </a>
-      </div>
+<!-- activate panelist tab when HOD Activates it -->
+
+  <% if (user.panelistStatus === 'activated') { %>
+    <div class="col-4">
+      <a href="/panelist" class="card" style="width: 15rem; height: 15rem;">
+        <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea" />
+        <div class="card-body">
+          <p class="card-text">Panelist</p>
+        </div>
+      </a>
+    </div>
+  <% } %>
       <div class="col-4" >
         <a href="/supervisor/approval" class="card" style="width: 15rem; height: 15rem;" aria-disabled="true">
             <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>

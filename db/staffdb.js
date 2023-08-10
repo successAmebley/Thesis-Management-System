@@ -25,6 +25,9 @@ const staffSchema= new mongoose.Schema({
     },
     panelist:{
         type:String
+    },
+    panelistStatus:{
+        type:String
     }
 
 

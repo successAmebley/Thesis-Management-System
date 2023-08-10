@@ -21,7 +21,7 @@ router.get('/HOD/HODapproval',async(req,res)=>{
         
 
         // console.log(listOfStudent)
-          res.render('HODapproval', {listOfStudent,listOfSupervisor,listOfPanelist,listOfStudentApproved,listOfStudentToAssign });
+          res.render('HODapproval', {user:req.user, listOfStudent,listOfSupervisor,listOfPanelist,listOfStudentApproved,listOfStudentToAssign });
       } else {
           res.redirect('/login');
       }
@@ -73,6 +73,34 @@ router.post('/HOD/HODapproval/assign',async(req,res)=>{
     await Student.findOneAndUpdate({ID:studentToBeAssigned},{supervisor:assigned.fName +" "+assigned.lName, supervisorID:assigned.ID})
     res.redirect('/HOD/HODapproval')
 
+})
+
+router.get('/HOD/students', async(req, res) => {
+    if (req.user && req.user.role === 'HOD') {
+
+
+        let listOfStudent= await Student.find({Program:req.user.department})
+      const   totalNumberOfStudentt= listOfStudent.length
+
+
+        res.render('HODStudents', { user: req.user , listOfStudent , totalNumberOfStudentt});
+    }
+    else {
+        res.redirect('/login');
+    }
+})
+
+router.post('/HOD/panelistActivation', async(req, res) => {
+    if (req.user && req.user.role === 'HOD') {
+
+
+        
+
+        res.redirect('/HOD/HODapproval');
+    }
+    else {
+        res.redirect('/login');
+    }
 })
 
 

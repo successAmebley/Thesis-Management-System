@@ -69,6 +69,25 @@ const studentSchema= new mongoose.Schema({
           }
 
     }
+      ],
+
+      supervisorGrade:{
+          type: Number
+      },
+
+      Pannelist:[
+          {
+              name:{
+                 type: String 
+              },
+              score:{
+                  type: Number
+              },
+              remarks:{
+                  type: String
+              }
+            
+          }
       ]
 
 
