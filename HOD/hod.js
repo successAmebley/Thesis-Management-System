@@ -11,6 +11,7 @@ router.get('/HOD', async(req, res) => {
     }
 });
 
+
 router.get('/HOD/HODapproval',async(req,res)=>{
     if (req.user && req.user.role === 'HOD') {
         let listOfStudent= await Student.find({Program:req.user.department,thesisStatus:'Pending Approval'})
@@ -78,12 +79,31 @@ router.post('/HOD/HODapproval/assign',async(req,res)=>{
 router.get('/HOD/students', async(req, res) => {
     if (req.user && req.user.role === 'HOD') {
 
-
         let listOfStudent= await Student.find({Program:req.user.department})
       const   totalNumberOfStudentt= listOfStudent.length
 
-
         res.render('HODStudents', { user: req.user , listOfStudent , totalNumberOfStudentt});
+    }
+    else {
+        res.redirect('/login');
+    }
+})
+
+router.post('/HOD/students/publish', async(req, res) => {
+    if(req.user && req.user.role === 'HOD') {
+        
+        const studentID= req.body.studentID
+        const status= req.body.status
+
+        if (status==='publish'){
+            await Student.findOneAndUpdate({ID:studentID},{thesisStatus:'Published'})
+            res.redirect('/HOD/students')
+        }else if(status==='reject'){
+            await Student.findOneAndUpdate({ID:studentID},{thesisStatus:'unpublished'})
+            res.redirect('/HOD/students')
+        }
+
+        
     }
     else {
         res.redirect('/login');
@@ -103,5 +123,18 @@ router.post('/HOD/panelistActivation', async(req, res) => {
     }
 })
 
+router.get("/HOD/thesis", async (req, res) => {
+    if (req.user && req.user.role === 'HOD') {
+
+        const findallstudentswithpublish=await Student.find({thesisStatus:'Published'})
+        res.render("HODThesispublish", {
+          user: req.user,
+          findallstudentswithpublish,
+        });
+
+    } else {
+        res.redirect('/login');
+    }
+});
 
 module.exports=router

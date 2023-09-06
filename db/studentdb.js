@@ -70,6 +70,24 @@ const studentSchema= new mongoose.Schema({
 
     }
       ],
+      final_document:[{
+          sender:{
+              type: String
+          },
+          topic:{
+              type: String
+          },
+          abstract:{
+              type: String
+          },
+          filename:{
+              type: String
+          },
+          timestamp: {
+              type: Date,
+              default: Date.now
+          }
+      }],
 
       supervisorGrade:{
           type: Number
