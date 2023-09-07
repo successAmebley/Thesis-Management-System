@@ -1,6 +1,9 @@
 const router= require('express').Router()
 const Staff = require('../db/staffdb')
 const Student = require('../db/studentdb')
+const fs= require('fs')
+const path = require("path");
+
 
 router.get('/HOD', async(req, res) => {
     if (req.user && req.user.role === 'HOD') {
@@ -136,5 +139,27 @@ router.get("/HOD/thesis", async (req, res) => {
         res.redirect('/login');
     }
 });
+
+router.post('/hod/publish/download',async (req,res)=>{
+    if (req.user && req.user.role === 'HOD') {
+       const  studentID= req.body.studentID
+    const Name= await Student.findOne({ID:studentID})
+
+    if(Name){
+    const filename= Name.final_document[0].filename;
+    console.log(filename)
+
+    const filePath = path.join(__dirname, '..', 'uploads', studentID, 'final', filename)
+
+  // Check if the file exists
+    if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+    
+    } else {
+    res.status(404).send('File not found');
+    }
+    }
+    }
+})
 
 module.exports=router

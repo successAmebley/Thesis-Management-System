@@ -37,37 +37,55 @@ const Student = require('./db/studentdb')
 const { saveChatMessage } = require('./middleware/chat');
  
 app.set('view engine','ejs')
-app.use(express.static(__dirname +'/public'));
+app.use(express.static(__dirname + "/public"));
 app.use(express.urlencoded({extended:false}))
 app.use(passport.initialize());
 app.use(passport.session());
 
-// serializing passport
-passport.serializeUser((user, done) => {
-    done(null, user);
-});
 
-// deserializing passport
-passport.deserializeUser((user, done) => {
-    done(null, user);
-});
 
+async function findUserByID(ID) {
+  let user = await Staff.findOne({ ID });
+
+  if (!user) {
+    user = await Student.findOne({ ID });
+  }
+
+  return user;
+}
 //strategy for passport
 passport.use(
-    new LocalStrategy({ usernameField: 'ID' }, async (ID, password, done) => {
-        let user = await Staff.findOne({ ID });
+  new LocalStrategy({ usernameField: "ID" }, async (ID, password, done) => {
+    try {
+      const user = await findUserByID(ID);
 
-        if (!user) {
-            user = await Student.findOne({ ID });
-        }
+      if (!user || !bcrypt.compareSync(password, user.password)) {
+        return done(null, false, {
+          message: "Incorrect username or password.",
+        });
+      }
 
-        if (!user || !bcrypt.compareSync(password, user.password)) {
-            return done(null, false, {message: 'Incorrect username or password.'});
-        }
-
-        return done(null, user);
-    })
+      return done(null, user);
+    } catch (error) {
+      return done(error);
+    }
+  })
 );
+
+// Serialize User
+passport.serializeUser((user, done) => {
+    done(null, user.ID); // Assuming the user object has an 'id' field
+});
+
+// Deserialize User
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await findUserByID(id);
+        done(null, user);
+    } catch (error) {
+        done(error);
+    }
+});
 
 app.use('',register);
 app.use('', hodRoute)

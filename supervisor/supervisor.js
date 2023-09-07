@@ -206,8 +206,6 @@ router.post('/supervisor/student/upload', upload.single('document'), async (req,
 
    req.flash('info', 'upload successfull');
 
-
-
     res.redirect(`/supervisor/students/supervise?studentID=${studentID}`,);
   } else {
     res.redirect('/login');
