@@ -141,7 +141,7 @@ router.get("/HOD/thesis", async (req, res) => {
 });
 
 router.post('/hod/publish/download',async (req,res)=>{
-    if (req.user && req.user.role === 'HOD') {
+    
        const  studentID= req.body.studentID
     const Name= await Student.findOne({ID:studentID})
 
@@ -158,7 +158,7 @@ router.post('/hod/publish/download',async (req,res)=>{
     } else {
     res.status(404).send('File not found');
     }
-    }
+    
     }
 })
 

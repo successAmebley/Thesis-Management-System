@@ -77,30 +77,31 @@ rel="stylesheet"
           class="list-group-item list-group-item-action py-2 ripple"
           aria-current="true"
         >
-          <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Main dashboard</span>
+          <span>Main dashboard</span>
         </a>
         <a href="/student" class="list-group-item list-group-item-action py-2 ripple active">
-          <i class="fas fa-chart-area fa-fw me-3"></i><span>Dashboard</span>
+          <i class=" fa fa-light fa-gauge me-3"></i></i><span>Dashboard</span>
         </a>
-        <a href="/project" class="list-group-item list-group-item-action py-2 ripple"
-          ><i class="fas fa-building fa-fw me-3"></i><span>Project</span></a
+        <a href="/student/thesis" class="list-group-item list-group-item-action py-2 ripple"
+          ><i class="fa fa-book fa-fw me-3"></i><span>Thesis</span></a
         >
-        <a href="/student/myproject/<%- user.ID %>" class="list-group-item list-group-item-action py-2 ripple"
-        ><i class="fas fa-calendar fa-fw me-3"></i><span>My Project</span></a
+        <a href="/student/myproject/<%- user.ID %>" class="list-group-item list-group-item-action py-2 ripple "
+        ><i class="fa fa-duotone fa-book-open-reader me-3"></i></i><span>My Project</span></a
       >
         <a href="/student/message" class="list-group-item list-group-item-action py-2 ripple"
-          ><i class="fas fa-users fa-fw me-3"></i><span>Messages</span></a
+          ><i class=" fa fa-brands fa-rocketchat me-3"></i><span>Messages</span></a
         >
         <a href="/plagiarism" class="list-group-item list-group-item-action py-2 ripple"
-          ><i class="fas fa-lock fa-fw me-3"></i><span>Plagiarism</span></a
+          ><i class=" fa fa-light fa-spell-check me-3"></i><span>Plagiarism</span></a
         >
         <a href="/studentReport" class="list-group-item list-group-item-action py-2 ripple"
-          ><i class="fas fa-lock fa-fw me-3"></i><span>Report</span></a
+          ><i class="fa fa-duotone fa-marker me-3"></i><span>Report</span></a
         >
         
         <a href="#" class="list-group-item list-group-item-action py-2 ripple">
-          <i class="fas fa-chart-pie fa-fw me-3"></i><span>LogOut</span>
+          <i class="fa fa-duotone fa-right-from-bracket me-3"></i><span>LogOut</span>
         </a>
+       
        
       </div>
     </div>
@@ -177,25 +178,25 @@ rel="stylesheet"
 <main style="margin-top: 58px;">
   <div class="container pt-4  ms-5 me-5 text-center">
       <div class="row">
-          <div class="col-4">
-              <a href="/project" class="card" style="width: 15rem; height: 15rem;">
-                  <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>
+          <div class="col-md-4 mb-2">
+              <a href="/student/thesis" class="card" style="width: 15rem; height: 15rem;">
+                  <img src="images/thesis.png" class="card-img-top" alt="Sunset Over the Sea"/>
                   <div class="card-body">
                     <p class="card-text">Thesis </p>
                   </div>            
               </a>
           </div>
-          <div class="col-4">
+          <div class="col-md-4 mb-2">
               <a class="card" href="/student/myproject/<%- user.ID %>" style="width: 15rem; height: 15rem;">
-                  <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>
+                  <img src="images/project.png" class="card-img-top" alt="Sunset Over the Sea" style="height: 15rem;"/>
                   <div class="card-body">
-                    <p class="card-text">Thesis Phase</p>
+                    <p class="card-text">My Project</p>
                   </div>
               </a>
           </div>
-          <div class="col-4">
+          <div class="col-md-4 mb-2">
             <a class="card" href="/student/message" style="width: 15rem; height: 15rem;">
-                <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>
+                <img src="images/message.jpeg" class="card-img-top" alt="Sunset Over the Sea" style="height: 15rem;"/>
                 <div class="card-body">
                   <p class="card-text">Messages </p>
                 </div>
@@ -203,26 +204,19 @@ rel="stylesheet"
         </div>
          
       </div>
-     <div class="row mt-5">
-          <div class="col-4">
+     <div class="row mt-3">
+          <div class="col-md-4 mb-2">
               <a href="/plagiarism" class="card" style="width: 15rem; height: 15rem;">
-                  <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>
+                  <img src="images/plagiarism.png" class="card-img-top" alt="Sunset Over the Sea" style="height: 15rem;"/>
                   <div class="card-body">
                     <p class="card-text">Check Plagiarism </p>
                   </div>
               </a>
           </div>
-          <div class="col-4" >
-            <a href="/finalDocument" class="card" style="width: 15rem; height: 15rem;" aria-disabled="true">
-                <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>
-                <div class="card-body">
-                  <p class="card-text">Upload </p>
-                </div>
-            </a>
-        </div>
-          <div class="col-4">
+          
+          <div class="col-md-4 mb-2">
               <a href="/profile" class="card" style="width: 15rem; height: 15rem;">
-                  <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>
+                  <img src="images/profile.jpg" class="card-img-top" alt="Sunset Over the Sea" style="height: 15rem;  "/>
                   <div class="card-body">
                     <p class="card-text">Profile </p>
                   </div>

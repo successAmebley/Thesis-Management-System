@@ -73,32 +73,30 @@ rel="stylesheet"
     <div class="position-sticky">
       <div class="list-group list-group-flush mx-3 mt-4">
         <a
-          href="/student"
+          href="/supervisor"
           class="list-group-item list-group-item-action py-2 ripple"
           aria-current="true"
         >
-          <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Main dashboard</span>
+         <span>Main dashboard</span>
         </a>
         <a href="/supervisor" class="list-group-item list-group-item-action py-2 ripple active">
-          <i class="fas fa-chart-area fa-fw me-3"></i><span>Dashboard</span>
+          <i class=" fa fa-light fa-gauge me-3"></i><span>Dashboard</span>
         </a>
-        <a href="/project" class="list-group-item list-group-item-action py-2 ripple"
-          ><i class="fas fa-building fa-fw me-3"></i><span>Project</span></a
+        <a href="/supervisor/thesis" class="list-group-item list-group-item-action py-2 ripple"
+          ><i class="fa fa-book fa-fw me-3"></i><span>Thesis</span></a
         >
         <a href="/supervisor/students" class="list-group-item list-group-item-action py-2 ripple"
-        ><i class="fas fa-calendar fa-fw me-3"></i><span>Students</span></a
+        ><i class="fa fa-duotone fa-users me-3"></i><span>Students</span></a
       >
         <a href="/supervisor/students/message" class="list-group-item list-group-item-action py-2 ripple"
-          ><i class="fas fa-users fa-fw me-3"></i><span>Messages</span></a
+          ><i class=" fa fa-brands fa-rocketchat me-3"></i><span>Messages</span></a
         >
-        <a href="/plagiarism" class="list-group-item list-group-item-action py-2 ripple"
-          ><i class="fas fa-lock fa-fw me-3"></i><span>Plagiarism</span></a
-        >
+       
         <a href="/supervisor/approval" class="list-group-item list-group-item-action py-2 ripple"
         ><i class="fas fa-lock fa-fw me-3"></i><span>Approval</span></a
       >
         <a href="/supervisor/Report" class="list-group-item list-group-item-action py-2 ripple"
-          ><i class="fas fa-lock fa-fw me-3"></i><span>Report</span></a
+          ><i class="fa fa-duotone fa-marker me-3"></i><span>Report</span></a
         >
         
         <a href="#" class="list-group-item list-group-item-action py-2 ripple">
@@ -175,29 +173,29 @@ rel="stylesheet"
 
             <!--Main layout-->
 <main style="margin-top: 58px;">
-  <div class="container pt-4  ms-5 me-5 text-center">
+  <div class="container pt-4  ms-5 text-center">
                     
 
-    <div class="row">
-      <div class="col-4">
+    <div class="row text-center">
+      <div class="col-md-4 ">
           <a href="/supervisor/students" class="card" style="width: 15rem; height: 15rem;">
-              <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>
+              <img src="images/students.jpeg" class="card-img-top" alt="Sunset Over the Sea" style="height: 10rem;"/>
               <div class="card-body">
-                <p class="card-text">Students </p>
+                <p class="card-text">Students</p>
               </div>            
           </a>
       </div>
-      <div class="col-4">
+      <div class="col-md-4 ">
           <a class="card" href="/supervisor/projectSupervised" style="width: 15rem; height: 15rem;">
-              <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>
+              <img src="images/thesis.png" class="card-img-top" alt="Sunset Over the Sea"/>
               <div class="card-body">
-                <p class="card-text">Project Suppervised</p>
+                <p class="card-text">Thesis</p>
               </div>
           </a>
       </div>
-      <div class="col-4">
+      <div class="col-md-4">
         <a class="card" href="/supervisor/students/message" style="width: 15rem; height: 15rem;">
-            <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>
+            <img src="images/message.jpeg" class="card-img-top" alt="Sunset Over the Sea" style="height: 15rem;"/>
             <div class="card-body">
               <p class="card-text">Messages </p>
             </div>
@@ -205,11 +203,11 @@ rel="stylesheet"
     </div>
      
   </div>
- <div class="row mt-5">
+ <div class="row mt-2 ">
 <!-- activate panelist tab when HOD Activates it -->
 
   <% if (user.panelistStatus === 'activated') { %>
-    <div class="col-4">
+    <div class="col-md-4">
       <a href="/panelist" class="card" style="width: 15rem; height: 15rem;">
         <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea" />
         <div class="card-body">
@@ -218,17 +216,17 @@ rel="stylesheet"
       </a>
     </div>
   <% } %>
-      <div class="col-4" >
+      <div class="col-md-4 " >
         <a href="/supervisor/approval" class="card" style="width: 15rem; height: 15rem;" aria-disabled="true">
-            <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>
+            <img src="images/approval.png" class="card-img-top" alt="Sunset Over the Sea"/>
             <div class="card-body">
               <p class="card-text">Approval </p>
             </div>
         </a>
     </div>
-      <div class="col-4">
+      <div class="col-md-4 ">
           <a href="/supervisor/report" class="card" style="width: 15rem; height: 15rem;">
-              <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top" alt="Sunset Over the Sea"/>
+              <img src="images/report.jpeg" class="card-img-top" alt="Sunset Over the Sea" style="height: 15rem;"/>
               <div class="card-body">
                 <p class="card-text">Report </p>
               </div>

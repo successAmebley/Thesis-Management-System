@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Staff = require("../db/staffdb");
 const Student = require("../db/studentdb");
 const { saveChatMessage } = require("../middleware/chat"); // Update the path to chat.js
+const { isAuthenticated, isAuthorized } = require("../middleware/auth");
 const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
@@ -9,7 +10,7 @@ const mammoth = require("mammoth");
 const PDFDocument = require("pdfkit");
 
 // student home route
-router.get("/student", async (req, res) => {
+router.get("/student",isAuthenticated, async (req, res) => {
   res.render("studentdashboard", {
     user: req.user,
     socketIOClientScript: "/socket.io/socket.io.js",
@@ -17,7 +18,7 @@ router.get("/student", async (req, res) => {
 });
 
 // student Project route
-router.get("/student/myproject/:params", (req, res) => {
+router.get("/student/myproject/:params", isAuthenticated, (req, res) => {
   const messages = req.flash("info");
 console.log(req.user.topic)
   // Check if the project Topic field is empty
@@ -143,7 +144,7 @@ router.post("/student/upload", upload.single("document"), async (req, res) => {
 });
 
 // Student message their supervisor
-router.get("/student/message", async (req, res) => {
+router.get("/student/message",isAuthenticated, async (req, res) => {
   const supervisor = await Staff.findOne({ ID: req.user.supervisorID });
   const studentId = req.user.ID;
   const room = `supervisor_${supervisor.ID}_student_${req.user.ID}`;
@@ -174,7 +175,7 @@ router.post("/student/message", async (req, res) => {
   res.redirect("/student/message");
 });
 
-router.get("/student/:studentID/student/:fileName", (req, res) => {
+router.get("/student/:studentID/student/:fileName",  (req, res) => {
   const { studentID, fileName } = req.params;
 
   // Build the file path based on studentID, uploaderType, and fileName
@@ -195,7 +196,7 @@ router.get("/student/:studentID/student/:fileName", (req, res) => {
   }
 });
 
-router.get("/plagiarism", (req, res) => {
+router.get("/plagiarism", isAuthenticated, (req, res) => {
   const { originalname, score, pdfFilePath } = "";
   const messages = req.flash("info");
   res.render("plagiarism", {
@@ -288,5 +289,18 @@ router.post(
     res.redirect(`/student/myproject/${studentID}`);
   }
 );
+
+
+router.get("/student/thesis", isAuthenticated, async (req, res) => {
+  const findallstudentswithpublish = await Student.find({
+    thesisStatus: "Published",
+  });
+  res.render("studentThesis", {
+    user: req.user,
+    findallstudentswithpublish,
+  });
+});
+
+
 
 module.exports = router;

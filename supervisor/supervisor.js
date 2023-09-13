@@ -3,6 +3,7 @@ const router= express.Router()
 const Staff = require('../db/staffdb')
 const Student = require('../db/studentdb')                   
 const { saveChatMessage } = require('../middleware/chat'); // Update the path to chat.js
+const { isAuthenticated, isAuthorized } = require('../middleware/auth');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
@@ -11,7 +12,7 @@ const flash = require('connect-flash');
 router.use(flash());
 
 //supervisor dashboard
-router.get('/supervisor', (req, res) => {
+router.get('/supervisor', isAuthenticated, (req, res) => {
     if (req.user && req.user.role === 'supervisor') {
         res.render('suppervisordashboard', { user: req.user, socketIOClientScript: '/socket.io/socket.io.js'  });
     } else {
@@ -20,7 +21,7 @@ router.get('/supervisor', (req, res) => {
 });
 
 //supervisor view students assigned
-router.get('/supervisor/students',async (req, res) => {
+router.get('/supervisor/students', isAuthenticated, async (req, res) => {
     if (req.user && req.user.role === 'supervisor') {
 
 
@@ -36,7 +37,7 @@ router.get('/supervisor/students',async (req, res) => {
 
 
 //supervisor supervise each student
-router.get('/supervisor/students/supervise',async (req, res) => {
+router.get('/supervisor/students/supervise', isAuthenticated, async (req, res) => {
   if (req.user && req.user.role === 'supervisor') {
 
 
@@ -54,7 +55,7 @@ router.get('/supervisor/students/supervise',async (req, res) => {
 
 
 // Supervisor message  students
-router.get('/supervisor/students/message', async (req, res) => {
+router.get('/supervisor/students/message', isAuthenticated, async (req, res) => {
 if (req.user && req.user.role === 'supervisor') {
   const students = await Student.find({ supervisorID: req.user.ID });
   const studentId = req.query.studentId; // Get the selected student ID from the query parameters
@@ -64,7 +65,7 @@ if (req.user && req.user.role === 'supervisor') {
 }
 });
 
-router.get('/supervisor/students/message/chat/:studentId', async (req, res) => {
+router.get('/supervisor/students/message/chat/:studentId',isAuthenticated, async (req, res) => {
   try {
     const student = await Student.findOne({ ID: req.params.studentId });
     if (!student) {
@@ -81,7 +82,7 @@ router.get('/supervisor/students/message/chat/:studentId', async (req, res) => {
 
 
 // Supervisor message a student
-router.get('/supervisor/student/message/:studentID', async (req, res) => {
+router.get('/supervisor/student/message/:studentID', isAuthenticated, async (req, res) => {
 if (req.user && req.user.role === 'supervisor') {
   const studentId = req.params.studentID;
   //const students = await Student.find({ supervisorID: req.user.ID });
@@ -212,7 +213,7 @@ router.post('/supervisor/student/upload', upload.single('document'), async (req,
   }
 });
 
-router.get('/supervisor/students/:studentID/student/:fileName', (req, res) => {
+router.get('/supervisor/students/:studentID/student/:fileName', isAuthenticated, (req, res) => {
   const { studentID, fileName } = req.params;
 
   // Build the file path based on studentID, uploaderType, and fileName
@@ -238,7 +239,7 @@ res.redirect('/supervisor/students/supervise?studentID='+req.body.studentID);
   
 })
 
-router.get('/supervisor/approval', async(req, res) => {
+router.get('/supervisor/approval', isAuthenticated, async(req, res) => {
   if (req.user && req.user.role === 'supervisor') {
 
 
@@ -263,6 +264,13 @@ router.post('/supervisor/approval',async(req, res)=>{
 }
 })
 
+router.get("/supervisor/thesis", isAuthenticated, async (req, res) => {
+   const findallstudentswithpublish=await Student.find({thesisStatus:'Published'})
+        res.render("supervisorThesis", {
+          user: req.user,
+          findallstudentswithpublish,
+        });
+});
 
 
 
