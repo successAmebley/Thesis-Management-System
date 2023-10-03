@@ -52,7 +52,7 @@ router.post('/HOD/HODapproval/reject',async(req,res)=>{
 router.post('/HOD/HODapproval/activate',async(req,res)=>{
     let activate= req.body.staffID
    
-    await Staff.findOneAndUpdate({ID:activate},{panelist:'activated',supervisor:'',supervisorID:''})
+    await Staff.findOneAndUpdate({ID:activate},{panelist:'activated'})
 
     res.redirect('/HOD/HODapproval')
 

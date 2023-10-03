@@ -71,18 +71,18 @@ rel="stylesheet"
   <!-- Sidebar -->
   <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
     <div class="position-sticky">
-      <div class="list-group list-group-flush mx-3 mt-4">
-        <a
+        <div class="list-group list-group-flush mx-3 mt-4">
+             <a
           href="/supervisor"
           class="list-group-item list-group-item-action py-2 ripple"
           aria-current="true"
         >
          <span>Main dashboard</span>
         </a>
-        <a href="/supervisor" class="list-group-item list-group-item-action py-2 ripple active">
+        <a href="/supervisor" class="list-group-item list-group-item-action py-2 ripple ">
           <i class=" fa fa-light fa-gauge me-3"></i><span>Dashboard</span>
         </a>
-        <a href="/supervisor/thesis" class="list-group-item list-group-item-action py-2 ripple"
+        <a href="/supervisor/thesis" class="list-group-item list-group-item-action py-2 ripple active"
           ><i class="fa fa-book fa-fw me-3"></i><span>Thesis</span></a
         >
         <a href="/supervisor/students" class="list-group-item list-group-item-action py-2 ripple"
@@ -102,8 +102,9 @@ rel="stylesheet"
         <a href="#" class="list-group-item list-group-item-action py-2 ripple">
           <i class="fas fa-chart-pie fa-fw me-3"></i><span>LogOut</span>
         </a>
-       
-      </div>
+           
+           
+          </div>
     </div>
   </nav>
   <!-- Sidebar -->
@@ -161,6 +162,9 @@ rel="stylesheet"
             Logout
           </button>
         </div>
+        
+        
+
 
       </ul>
     </div>
@@ -173,76 +177,26 @@ rel="stylesheet"
 
             <!--Main layout-->
 <main style="margin-top: 58px;">
-  <div class="container pt-4  ms-5 text-center">
+  <div class="container pt-4  ms-5 me-5 text-center">
                     
+                    <%= student.ID %>
 
-    <div class="row text-center">
-      <div class="col-md-4 ">
-          <a href="/supervisor/students" class="card" style="width: 15rem; height: 15rem;">
-              <img src="images/students.jpeg" class="card-img-top" alt="Sunset Over the Sea" style="height: 10rem;"/>
-              <div class="card-body">
-                <p class="card-text">Students</p>
-              </div>            
-          </a>
-      </div>
-      <div class="col-md-4 ">
-          <a class="card" href="/supervisor/projectSupervised" style="width: 15rem; height: 15rem;">
-              <img src="images/thesis.png" class="card-img-top" alt="Sunset Over the Sea"/>
-              <div class="card-body">
-                <p class="card-text">Thesis</p>
-              </div>
-          </a>
-      </div>
-      <div class="col-md-4">
-        <a class="card" href="/supervisor/students/message" style="width: 15rem; height: 15rem;">
-            <img src="images/message.jpeg" class="card-img-top" alt="Sunset Over the Sea" style="height: 15rem;"/>
-            <div class="card-body">
-              <p class="card-text">Messages </p>
+                         
+                          
+                         
+                           
+                          
+                         
+                      
+                </div>
+
             </div>
-        </a>
-    </div>
-     
-  </div>
- <div class="row mt-2 ">
-<!-- activate panelist tab when HOD Activates it -->
-
-  <% if (user.panelist === 'activated') { %>
-    <div class="col-md-4">
-      <a href="/panelist" class="card" style="width: 15rem; height: 15rem;">
-        <img src="images/panelist.avif" class="card-img-top" alt="Sunset Over the Sea " style="height: 10rem;" />
-        <div class="card-body">
-          <p class="card-text">Panelist</p>
+            
         </div>
-      </a>
-    </div>
-  <% } %>
-      <div class="col-md-4 " >
-        <a href="/supervisor/approval" class="card" style="width: 15rem; height: 15rem;" aria-disabled="true">
-            <img src="images/approval.png" class="card-img-top" alt="Sunset Over the Sea"/>
-            <div class="card-body">
-              <p class="card-text">Approval </p>
-            </div>
-        </a>
-    </div>
-      <div class="col-md-4 ">
-          <a href="/supervisor/report" class="card" style="width: 15rem; height: 15rem;">
-              <img src="images/report.jpeg" class="card-img-top" alt="Sunset Over the Sea" style="height: 15rem;"/>
-              <div class="card-body">
-                <p class="card-text">Report </p>
-              </div>
-          </a>
       </div>
-    
-      </div>
-  </div>
-
-</div>
-</main>
-<!--Main layout-->
 <script
   type="text/javascript"
   src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
   </body>
 </html>

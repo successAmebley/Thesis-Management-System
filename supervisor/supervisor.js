@@ -272,6 +272,21 @@ router.get("/supervisor/thesis", isAuthenticated, async (req, res) => {
         });
 });
 
+router.get('/panelist',isAuthenticated, async(req,res)=>{
 
+const studentsForDefendce = await Student.find({
+  thesisStatus: "Approve For Defense",
+});
+res.render("panelist", { user: req.user, studentsForDefendce });
+
+})
+
+router.get("/panelist/grading",isAuthenticated, async(req,res)=>{
+ const studentID= req.body.studentID
+ const student= await Student.findOne({studentID})
+
+ res.render("panelistGradeSheet", { student, user: req.user });
+
+});
 
 module.exports=router

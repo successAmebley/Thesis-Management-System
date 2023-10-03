@@ -95,7 +95,7 @@ const studentSchema= new mongoose.Schema({
 
       Pannelist:[
           {
-              name:{
+              studentID:{
                  type: String 
               },
               score:{

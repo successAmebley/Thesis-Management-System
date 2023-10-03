@@ -293,11 +293,11 @@ rel="stylesheet"
                           <th scope="row"><%- panelist.fName%>  <%- panelist.lName %></th>
                           <td><%- panelist.department %> </td>
                           <td ><%- panelist.role %></td>
-                          <td>  <form action="/HOD/HODapproval/approve" method="post" style="display: inline; margin-right: 5px;">
+                          <td>  <form action="/HOD/HODapproval/activate" method="post" style="display: inline; margin-right: 5px;">
                             <input type="hidden" name="staffID" value="<%- panelist.ID %>">
                           <button type="submit" id="activate" class="btn btn-outline-success" >Activate</button>
                         </form>
-                        <form action="/HOD/HODapproval/reject" method="post" style="display: inline;">
+                        <form action="/HOD/HODapproval/deactivate" method="post" style="display: inline;">
                           <input type="hidden" name="staffID" value="<%- panelist.ID %>">
                           <button type="submit" id="deactivate" class="btn btn-outline-danger">Deactivate</button>
                         </form></td>
