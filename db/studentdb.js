@@ -14,10 +14,10 @@ const studentSchema= new mongoose.Schema({
     email:{
         type:String
     },
-    deparment:{
+    faculty:{
         type:String
     },
-    Program:{
+    department:{
         type:String
     },
     role:{

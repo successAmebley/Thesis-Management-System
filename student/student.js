@@ -258,10 +258,7 @@ router.post("/plagiarism", upload.single("document"), async (req, res) => {
   }
 });
 
-router.post(
-  "/thesis/finalDocument",
-  upload.single("document"),
-  async (req, res) => {
+router.post( "/thesis/finalDocument",upload.single("document"),async (req, res) => {
     const studentID = req.user.ID;
     const uploadedDocument = req.file;
     const topic = req.body.topic;

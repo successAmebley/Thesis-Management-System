@@ -17,11 +17,11 @@ router.get('/HOD', async(req, res) => {
 
 router.get('/HOD/HODapproval',async(req,res)=>{
     if (req.user && req.user.role === 'HOD') {
-        let listOfStudent= await Student.find({Program:req.user.department,thesisStatus:'Pending Approval'})
+        let listOfStudent= await Student.find({department:req.user.department,thesisStatus:'Pending Approval'})
         let listOfSupervisor = await Staff.find({ role: 'supervisor', department: req.user.department });
         let listOfPanelist= await Staff.find()
-        let listOfStudentApproved= await Student.find({Program:req.user.department, thesisStatus: 'Approved',})
-        let listOfStudentToAssign=await Student.find({Program:req.user.department, thesisStatus: 'Approved',supervisor:null})
+        let listOfStudentApproved= await Student.find({department:req.user.department, thesisStatus: 'Approved',})
+        let listOfStudentToAssign=await Student.find({department:req.user.department, thesisStatus: 'Approved',supervisor:null})
         
 
         // console.log(listOfStudent)
@@ -82,7 +82,7 @@ router.post('/HOD/HODapproval/assign',async(req,res)=>{
 router.get('/HOD/students', async(req, res) => {
     if (req.user && req.user.role === 'HOD') {
 
-        let listOfStudent= await Student.find({Program:req.user.department})
+        let listOfStudent= await Student.find({department:req.user.department})
       const   totalNumberOfStudentt= listOfStudent.length
 
         res.render('HODStudents', { user: req.user , listOfStudent , totalNumberOfStudentt});
