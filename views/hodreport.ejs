@@ -72,37 +72,33 @@ rel="stylesheet"
   <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
     <div class="position-sticky">
         <div class="list-group list-group-flush mx-3 mt-4">
-             <a
-          href="/supervisor"
-          class="list-group-item list-group-item-action py-2 ripple"
-          aria-current="true"
-        >
-         <span>Main dashboard</span>
-        </a>
-        <a href="/supervisor" class="list-group-item list-group-item-action py-2 ripple ">
-          <i class=" fa fa-light fa-gauge me-3"></i><span>Dashboard</span>
-        </a>
-        <a href="/supervisor/thesis" class="list-group-item list-group-item-action py-2 ripple active"
-          ><i class="fa fa-book fa-fw me-3"></i><span>Thesis</span></a
-        >
-        <a href="/supervisor/students" class="list-group-item list-group-item-action py-2 ripple"
-        ><i class="fa fa-duotone fa-users me-3"></i><span>Students</span></a
-      >
-        <a href="/supervisor/students/message" class="list-group-item list-group-item-action py-2 ripple"
-          ><i class=" fa fa-brands fa-rocketchat me-3"></i><span>Messages</span></a
-        >
-       
-        <a href="/supervisor/approval" class="list-group-item list-group-item-action py-2 ripple"
-        ><i class="fas fa-lock fa-fw me-3"></i><span>Approval</span></a
-      >
-        <!-- <a href="/supervisor/Report" class="list-group-item list-group-item-action py-2 ripple"
-          ><i class="fa fa-duotone fa-marker me-3"></i><span>Report</span></a
-        > -->
-        
-        <a href="/logout" class="list-group-item list-group-item-action py-2 ripple">
-          <i class="fas fa-chart-pie fa-fw me-3"></i><span>LogOut</span>
-        </a>
-           
+           <a
+              href="/HOD"
+              class="list-group-item list-group-item-action py-2 ripple"
+              aria-current="true"
+            >
+              <span>Main dashboard</span>
+            </a>
+            <a href="/HOD" class="list-group-item list-group-item-action py-2 ripple ">
+              <i class=" fa fa-light fa-gauge me-3"></i><span>Dashboard</span>
+            </a>
+            <a href="/HOD/thesis" class="list-group-item list-group-item-action py-2 ripple"
+              ><i class="fa fa-book fa-fw me-3"></i><span>Thesis</span></a
+            >
+            <a href="/HOD/students" class="list-group-item list-group-item-action py-2 ripple "
+            ><i class="fa fa-duotone fa-users me-3"></i><span>Students</span></a
+          >
+            
+            <a href="/HOD/HODapproval" class="list-group-item list-group-item-action py-2 ripple"
+            ><i class="fas fa-lock fa-fw me-3"></i><span>Approval</span></a
+          >
+            <a href="/HOD/Report" class="list-group-item list-group-item-action py-2 ripple active"
+              ><i class="fa fa-duotone fa-marker me-3"></i><span>Report</span></a
+            >
+            
+            <a href="/logout" class="list-group-item list-group-item-action py-2 ripple">
+              <i class=" fa fa-light fa-right-from-bracket me-3"></i><span>LogOut</span>
+            </a>
            
           </div>
     </div>
@@ -184,23 +180,22 @@ rel="stylesheet"
                           <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Thesis Topic</th>
-                            <th scope="col">Year</th>
+                            <th scope="col">Status</th>
                             <th scope="col"></th>
                           </tr>
                         </thead>
                         <tbody>
                             
-                          <% findallstudentswithpublish.forEach(student => { %>
+                          <% listOfStudent.forEach(student => { %>
   <tr>
     <th scope="row"><%- student.fName%>  <%- student.lName %></th>
     <td><%- student.topic %> <span><a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal<%- student.ID %>">read More</a></span></td>
-    <td id="status"><%=new Date(student.final_document[0].timestamp).getFullYear() %></td>
+    <td id="status"><%- student.thesisStatus %></td>
     <td>
-      <form action="/hod/publish/download" method="post" style="display: inline; margin-right: 5px;">
-        <input type="hidden" name="studentID" value="<%- student.ID %>">
-        <button type="submit" id="download" class="btn btn-outline-success" name="status" value="download" >download</button>
-        
-      </form>
+      
+        <!-- Triggering button for "generate" modal -->
+<a class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#generate<%- student.ID %>">Generate</a>
+
     </td>
     
   </tr>
@@ -217,14 +212,47 @@ rel="stylesheet"
         <div class="modal-body">
           <%- student.description %>
         </div>
-        <div class="modal-footer">
-          <form action="/supervisor/students/supervise" method="get" style="display: inline; margin-right: 5px;">
-            <button type="submit" id="approve" class="btn btn-outline-success" >Supervise</button>
-          </form>
-        </div>
+        
       </div>
     </div>
   </div>
+
+ <!-- Modal -->
+<div class="modal fade" id="generate<%- student.ID %>" tabindex="-1" aria-labelledby="generate" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"> Report for <%- student.fName%>  <%- student.lName %></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <%- student.topic %>
+                <p>Student ID: <%- student.ID %> </p>
+                <p>Student Email: <%- student.email %></p>
+                <p>Faculty: <%- student.faculty %></p>
+                <p>Department: <%- student.department %></p>
+                <p>Supervisor: <%- student.supervisor %></p>
+                <p>Status: <%-student.thesisStatus %></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="printModalContent('generate<%- student.ID %>')">Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to print modal content -->
+<script>
+    function printModalContent(modalId) {
+        var printWindow = window.open('', '', 'width=600,height=600');
+        printWindow.document.write('<html><head><title>Print</title>');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(document.getElementById(modalId).innerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    }
+</script>
 <% }) %>
 
 
@@ -241,9 +269,10 @@ rel="stylesheet"
             
         </div>
       </div>
-<script
+      <script
   type="text/javascript"
   src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
   </body>
 </html>

@@ -94,11 +94,11 @@ rel="stylesheet"
         <a href="/plagiarism" class="list-group-item list-group-item-action py-2 ripple"
           ><i class=" fa fa-light fa-spell-check me-3"></i><span>Plagiarism</span></a
         >
-        <a href="/studentReport" class="list-group-item list-group-item-action py-2 ripple"
+        <!-- <a href="/studentReport" class="list-group-item list-group-item-action py-2 ripple"
           ><i class="fa fa-duotone fa-marker me-3"></i><span>Report</span></a
-        >
+        > -->
         
-        <a href="#" class="list-group-item list-group-item-action py-2 ripple">
+        <a href="/logout" class="list-group-item list-group-item-action py-2 ripple">
           <i class="fa fa-duotone fa-right-from-bracket me-3"></i><span>LogOut</span>
         </a>
        
@@ -126,12 +126,12 @@ rel="stylesheet"
 
       <!-- Brand -->
       <a class="navbar-brand" href="#">
-        <img
+        <!-- <img
           src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
           height="25"
           alt="MDB Logo"
           loading="lazy"
-        />
+        /> -->
       </a>
      
        <!-- Right links -->
@@ -370,7 +370,7 @@ rel="stylesheet"
                               </ul>
                               <form action="/student/upload" method="post" enctype="multipart/form-data">
                                 <!-- Add a hidden input field to store the student ID -->
-                                <input type="hidden" name="studentID" value="<%- user.ID %>">
+                                <input type="hidden" name="studentID" value="<%-user.ID%>">
                                 <input type="hidden" name="uploaderType" value="student"> <!-- Indicate that the uploader is a supervisor -->
                                 <div class="input-group mb-3 mt-5">
                                   <!-- Add the "name" attribute to the file input -->
@@ -386,7 +386,7 @@ rel="stylesheet"
 
 
                 <div class="row mt-5">
-                    <div class="col">
+                    <!-- <div class="col">
                         <div class="card ms-5">
                             <div class="card-header">
                               To DO List
@@ -408,7 +408,7 @@ rel="stylesheet"
                               
                             </div>
                           </div>
-                    </div>
+                    </div> -->
                     <div class="col">
                         <div class="card me-5">
                             <div class="card-header">
@@ -416,27 +416,26 @@ rel="stylesheet"
                             </div>
                             <div class="card-body">
                                 <table class="table">
-                                    <thead>
-                                      <tr>
-                                        
-                                        <th scope="col">File</th>
-                             
-                                      </tr>
-                                    </thead>
+                                    <th>
+                                     
+                                    </th>
                                     <tbody>
                                       <tr>
                                        
-                                        <td><a href="#">Thesis Mangement System-Introduction</a></td>
-                                       
-                                      </tr>
-                                      
-                                      <% user.uploads.forEach((file) => { %>
+                                        <% user.uploads.forEach((file) => { %>
                                         <% if (file.sender === 'supervisor') { %> 
-                                          <a href="/student/<%- user.ID %>/student/<%- file.filename %>"><%- file.filename %></a>
+                                        <tr>
 
+                                        
+                                          <a href="/student/<%- user.ID %>/student/<%- file.filename %>"><%- file.filename %></a>
+                                        </tr>
                                           <br>
                                         <% } %>
                                       <% }); %>
+                                       
+                                      </tr>
+                                      
+                                     
 
                                     </tbody>
                                   </table>

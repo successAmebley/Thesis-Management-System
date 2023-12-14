@@ -157,13 +157,13 @@ const storage = multer.diskStorage({
     const studentID = req.body.studentID;
     const uploaderType = req.body.uploaderType;
 
-    let destinationFolder = '';
-    if (uploaderType === 'supervisor') {
+    let destinationFolder = "";
+    if (uploaderType === "supervisor") {
       destinationFolder = `uploads/${studentID}/supervisor/`;
-    } else if (uploaderType === 'student') {
+    } else if (uploaderType === "student") {
       destinationFolder = `uploads/${studentID}/student/`;
     } else {
-      destinationFolder = 'uploads/'; // Fallback, you can handle other cases as needed
+      destinationFolder = "uploads/"; // Fallback, you can handle other cases as needed
     }
 
     // Create the directory if it doesn't exist
@@ -179,7 +179,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Handle supervisor upload
-router.post('/supervisor/student/upload', upload.single('document'), async (req, res) => {
+router.post('/supervisor/student/upload', upload.single("document"), async (req, res) => {
   if (req.user && req.user.role === 'supervisor') {
     const studentID = req.body.studentID;
     const uploadedDocument = req.file;
@@ -218,7 +218,7 @@ router.get('/supervisor/students/:studentID/student/:fileName', isAuthenticated,
 
   // Build the file path based on studentID, uploaderType, and fileName
   const filePath = path.join(__dirname, '..', 'uploads', studentID, 'student', fileName);
-
+console.log(filePath)
   // Check if the file exists
   if (fs.existsSync(filePath)) {
     res.sendFile(filePath);

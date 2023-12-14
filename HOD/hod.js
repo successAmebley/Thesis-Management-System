@@ -162,4 +162,21 @@ router.post('/hod/publish/download',async (req,res)=>{
     }
 })
 
+
+router.get('/HOD/report',async(req,res)=>{
+
+  if (req.user && req.user.role === "HOD") {
+    let listOfStudent = await Student.find({ department: req.user.department });
+    const totalNumberOfStudentt = listOfStudent.length;
+
+    res.render("hodreport", {
+      user: req.user,
+      listOfStudent,
+      totalNumberOfStudentt,
+    });
+  } else {
+    res.redirect("/login");
+  }
+})
+
 module.exports=router

@@ -98,7 +98,7 @@ const storage = multer.diskStorage({
       destinationFolder = `uploads/${studentID}/supervisor/`;
     } else if (uploaderType === "student") {
       destinationFolder = `uploads/${studentID}/student/`;
-    }
+    }else
     if (uploaderType === "student_final") {
       destinationFolder = `uploads/${studentID}/final/`;
     } else {

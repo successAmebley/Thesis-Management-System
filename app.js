@@ -128,6 +128,13 @@ app.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
+app.get("/logout", (req, res) => {
+  // req.logout();
+  req.session.destroy((err) => {
+    res.redirect("/login");
+  });
+});
+
 // Socket.io logic
 io.on("connection", (socket) => {
   console.log("A user connected");
